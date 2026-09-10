@@ -1,4 +1,4 @@
-import { Clock3, Landmark, MapPin, Navigation, ParkingCircle } from "lucide-react";
+import { Clock3, ExternalLink, Landmark, MapPin, Navigation, ParkingCircle } from "lucide-react";
 import { getBrand } from "@/lib/brands";
 import { formatDistance } from "@/lib/distance";
 import { navigationUrl } from "@/lib/stores";
@@ -20,5 +20,6 @@ export function StoreCard({ store, compact = false }: { store: Store; compact?: 
       {store.hasAtm && <span className="inline-flex items-center gap-1"><Landmark size={14} /> ATM</span>}
     </div>}
     <a href={navigationUrl(store)} target="_blank" rel="noreferrer" className="btn-primary mt-4 w-full !py-2.5 text-sm"><Navigation size={16} /> นำทางด้วย Google Maps</a>
+    {!compact && <a href={`https://www.openstreetmap.org/edit#map=19/${store.lat}/${store.lng}`} target="_blank" rel="noreferrer" className="mt-3 flex items-center justify-center gap-1.5 text-xs font-semibold text-[var(--muted)] hover:text-[var(--green)]"><ExternalLink size={13} /> แก้ไขข้อมูลร้านนี้บน OpenStreetMap</a>}
   </article>;
 }

@@ -15,6 +15,8 @@ export function LocationCta({ compact = false, label = "ค้นหาร้า
     try {
       const coordinates = await requestCoordinates();
       sessionStorage.setItem("klai:initial-location", JSON.stringify(coordinates));
+      sessionStorage.setItem("klai:current-location", JSON.stringify(coordinates));
+      localStorage.setItem("klai:search-preferences", JSON.stringify({ brandIds: ["seven-eleven"], radiusKm: 1 }));
       router.push("/map");
     } catch (reason) { setError(reason instanceof Error ? reason.message : "ระบุตำแหน่งไม่สำเร็จ"); setLoading(false); }
   };

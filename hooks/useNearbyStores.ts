@@ -6,6 +6,7 @@ import { requestCoordinates } from "@/lib/geolocation";
 import type { BrandId, Coordinates, Store } from "@/lib/types";
 
 const INITIAL_LOCATION_KEY = "klai:initial-location";
+const CURRENT_LOCATION_KEY = "klai:current-location";
 
 export function useNearbyStores(brandIds: BrandId[], radiusKm: number) {
   const [center, setCenter] = useState<Coordinates | null>(null);
@@ -16,13 +17,20 @@ export function useNearbyStores(brandIds: BrandId[], radiusKm: number) {
 
   const locate = useCallback(() => {
     setStatus("locating"); setError("");
-    requestCoordinates().then(setCenter).catch((reason: unknown) => { setError(reason instanceof Error ? reason.message : "ระบุตำแหน่งไม่สำเร็จ"); setStatus("error"); });
+    requestCoordinates().then((coordinates) => {
+      try { sessionStorage.setItem(CURRENT_LOCATION_KEY, JSON.stringify(coordinates)); } catch { /* keep in memory */ }
+      setCenter(coordinates);
+    }).catch((reason: unknown) => { setError(reason instanceof Error ? reason.message : "ระบุตำแหน่งไม่สำเร็จ"); setStatus("error"); });
   }, []);
 
   useEffect(() => {
     try {
       const saved = sessionStorage.getItem(INITIAL_LOCATION_KEY);
       if (saved) { sessionStorage.removeItem(INITIAL_LOCATION_KEY); queueMicrotask(() => setCenter(JSON.parse(saved) as Coordinates)); return; }
+      if (window.location.hash !== "#browse") {
+        const current = sessionStorage.getItem(CURRENT_LOCATION_KEY);
+        if (current) { queueMicrotask(() => setCenter(JSON.parse(current) as Coordinates)); return; }
+      }
     } catch { /* request a fresh location */ }
     if (window.location.hash === "#browse") { queueMicrotask(() => setStatus("idle")); return; }
     const timer = window.setTimeout(locate, 0);

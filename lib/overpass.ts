@@ -1,16 +1,19 @@
 import { enabledBrands, getBrand } from "./brands";
 import { distanceKm } from "./distance";
 import type { BrandId, Coordinates, Store } from "./types";
+import { FUEL_PROXIMITY_THRESHOLD_METERS, fuelPatterns, identifyFuelBrand, type FuelBrand } from "./combo";
 
 const ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
 
-export function buildStoreQuery(brandIds: string[], center: Coordinates, radiusMeters: number) {
+export function buildStoreQuery(brandIds: BrandId[], center: Coordinates, radiusMeters: number) {
   const lines = brandIds.map((id) => {
     const brand = getBrand(id);
     const valueOperator = brand.osmValue.includes("|") ? "~" : "=";
     return `  nwr["${brand.osmKey}"${valueOperator}"${brand.osmValue}"]["brand"~"${brand.osmBrandPattern}",i](around:${radiusMeters},${center.lat},${center.lng});`;
   });
-  return `[out:json][timeout:20];\n(\n${lines.join("\n")}\n);\nout center tags;`;
+  const fuelBrands = [...new Set(brandIds.map((id) => getBrand(id).fuelBrandPair).filter((value): value is FuelBrand => Boolean(value)))];
+  const fuelLines = fuelBrands.map((brand) => `  nwr["amenity"="fuel"]["brand"~"${fuelPatterns[brand]}",i](around:${radiusMeters},${center.lat},${center.lng});`);
+  return `[out:json][timeout:20];\n(\n${[...lines, ...fuelLines].join("\n")}\n);\nout center tags;`;
 }
 
 type OverpassElement = { id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
@@ -21,6 +24,11 @@ function identifyBrand(tags: Record<string, string>): BrandId | null {
 }
 
 export function normalizeStores(elements: OverpassElement[], center: Coordinates): Store[] {
+  const fuelStations = elements.flatMap((element) => {
+    const lat = element.lat ?? element.center?.lat; const lng = element.lon ?? element.center?.lon;
+    const brand = identifyFuelBrand(element.tags ?? {});
+    return lat != null && lng != null && (element.tags ?? {}).amenity === "fuel" && brand ? [{ lat, lng, brand }] : [];
+  });
   return elements.flatMap((element) => {
     const lat = element.lat ?? element.center?.lat;
     const lng = element.lon ?? element.center?.lon;
@@ -36,9 +44,9 @@ export function normalizeStores(elements: OverpassElement[], center: Coordinates
       is24Hours: tags.opening_hours === "24/7",
       hasParking: tags.parking === "yes" || tags["amenity:parking"] === "yes",
       hasAtm: tags.atm === "yes",
-      inFuelStation: Boolean(tags["fuel:brand"] || tags["addr:place"]?.toLowerCase().includes("station")),
+      inFuelStation: false,
     }];
-  }).sort((a, b) => a.distanceKm - b.distanceKm);
+  }).map((store) => ({ ...store, inFuelStation: fuelStations.some((fuel) => fuel.brand === getBrand(store.brandId).fuelBrandPair && distanceKm(store, fuel) * 1000 <= FUEL_PROXIMITY_THRESHOLD_METERS) })).sort((a, b) => a.distanceKm - b.distanceKm);
 }
 
 export async function fetchStores(brandIds: BrandId[], center: Coordinates, radiusMeters: number, signal?: AbortSignal) {

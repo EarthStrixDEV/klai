@@ -12,6 +12,6 @@ export const brands: Brand[] = [
 export const enabledBrands = brands.filter((brand) => brand.enabled);
 export const defaultBrandIds: BrandId[] = ["seven-eleven"];
 
-export function getBrand(id: string) {
+export function getBrand(id: BrandId) {
   return brands.find((brand) => brand.id === id) ?? brands[0];
 }

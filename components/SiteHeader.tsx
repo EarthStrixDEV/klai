@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Navigation, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
+import { LocationCta } from "./LocationCta";
 
 const links = [
   ["/", "หน้าหลัก"], ["/map", "แผนที่"], ["/stores", "รายชื่อร้าน"],
@@ -18,7 +19,7 @@ export function SiteHeader() {
       <nav className="desktop-only flex items-center gap-6 text-sm font-semibold text-[var(--muted)]">
         {links.map(([href, label]) => <Link key={href} href={href} className="hover:text-[var(--green-dark)]">{label}</Link>)}
       </nav>
-      <Link className="btn-primary desktop-only !px-4 !py-2.5 text-sm" href="/map"><Navigation size={17} /> ร้านใกล้ฉัน</Link>
+      <span className="desktop-only"><LocationCta compact label="ร้านใกล้ฉัน" /></span>
       <button className="icon-button mobile-menu-button" onClick={() => setOpen(!open)} aria-label="เปิดเมนู">{open ? <X /> : <Menu />}</button>
     </div>
     {open && <nav className="container-wide mobile-menu grid gap-1 pb-4">

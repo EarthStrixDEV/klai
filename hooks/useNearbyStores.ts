@@ -2,26 +2,29 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchStores } from "@/lib/overpass";
+import { requestCoordinates } from "@/lib/geolocation";
 import type { BrandId, Coordinates, Store } from "@/lib/types";
+
+const INITIAL_LOCATION_KEY = "klai:initial-location";
 
 export function useNearbyStores(brandIds: BrandId[], radiusKm: number) {
   const [center, setCenter] = useState<Coordinates | null>(null);
   const [stores, setStores] = useState<Store[]>([]);
-  const [status, setStatus] = useState<"locating" | "loading" | "ready" | "error">("locating");
+  const [status, setStatus] = useState<"idle" | "locating" | "loading" | "ready" | "error">("locating");
   const [error, setError] = useState("");
   const abortRef = useRef<AbortController | null>(null);
 
   const locate = useCallback(() => {
     setStatus("locating"); setError("");
-    if (!navigator.geolocation) { setError("เบราว์เซอร์นี้ไม่รองรับการระบุตำแหน่ง"); setStatus("error"); return; }
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => setCenter({ lat: coords.latitude, lng: coords.longitude }),
-      () => { setError("กรุณาอนุญาตการเข้าถึงตำแหน่ง เพื่อค้นหาร้านใกล้คุณ"); setStatus("error"); },
-      { enableHighAccuracy: true, timeout: 12_000, maximumAge: 60_000 },
-    );
+    requestCoordinates().then(setCenter).catch((reason: unknown) => { setError(reason instanceof Error ? reason.message : "ระบุตำแหน่งไม่สำเร็จ"); setStatus("error"); });
   }, []);
 
   useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(INITIAL_LOCATION_KEY);
+      if (saved) { sessionStorage.removeItem(INITIAL_LOCATION_KEY); queueMicrotask(() => setCenter(JSON.parse(saved) as Coordinates)); return; }
+    } catch { /* request a fresh location */ }
+    if (window.location.hash === "#browse") { queueMicrotask(() => setStatus("idle")); return; }
     const timer = window.setTimeout(locate, 0);
     return () => window.clearTimeout(timer);
   }, [locate]);

@@ -6,7 +6,22 @@ export type FuelBrand = "PTT" | "Bangchak" | "PT";
 export type FuelStation = Coordinates & { id: string; name: string; brand: FuelBrand; distanceKm: number; openingHours?: string; hasParking?: boolean; hasToilets?: boolean; hasEv?: boolean };
 export type FuelCombo = FuelStation & { pairedStores: Store[] };
 
-const fuelPatterns: Record<FuelBrand, string> = { PTT: "PTT|ปตท", Bangchak: "Bangchak|บางจาก", PT: "^PT$|PT Station|พีที" };
+// สเปก spec/modules/05-gas-station-combo.md แนะนำเริ่มทดสอบที่ 50-80 เมตร ยังไม่ verify กับข้อมูลจริง
+export const FUEL_PROXIMITY_THRESHOLD_METERS = 80;
+
+export const fuelPatterns: Record<FuelBrand, string> = { PTT: "PTT|ปตท", Bangchak: "Bangchak|บางจาก", PT: "^PT$|PT Station|พีที" };
+
+// ตาม spec/modules/05-gas-station-combo.md: มีแค่ PTT ที่ผ่าน prototype จริง คู่อื่นยังไม่ verify กับข้อมูล OSM จริง ห้ามให้ผู้ใช้เลือกได้
+export const provenFuelPairs: FuelBrand[] = ["PTT"];
+
+export function isProvenFuelPair(brand: FuelBrand): boolean {
+  return provenFuelPairs.includes(brand);
+}
+
+export function identifyFuelBrand(tags: Record<string, string>): FuelBrand | null {
+  const text = `${tags.brand ?? ""} ${tags.name ?? ""}`.trim();
+  return (Object.keys(fuelPatterns) as FuelBrand[]).find((brand) => new RegExp(fuelPatterns[brand], "i").test(text)) ?? null;
+}
 
 export function matchFuelCombos(fuels: FuelStation[], stores: Store[], thresholdMeters: number): FuelCombo[] {
   return fuels.flatMap((fuel) => {
@@ -17,9 +32,10 @@ export function matchFuelCombos(fuels: FuelStation[], stores: Store[], threshold
 
 type Element = { id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
 
-export async function fetchFuelCombos(pairs: FuelBrand[], center: Coordinates, radiusMeters: number, thresholdMeters = 80, signal?: AbortSignal) {
-  const storeBrands = enabledBrands.filter((brand) => brand.fuelBrandPair && pairs.includes(brand.fuelBrandPair));
-  const fuelLines = pairs.map((pair) => `  nwr["amenity"="fuel"]["brand"~"${fuelPatterns[pair]}",i](around:${radiusMeters},${center.lat},${center.lng});`);
+export async function fetchFuelCombos(pairs: FuelBrand[], center: Coordinates, radiusMeters: number, thresholdMeters = FUEL_PROXIMITY_THRESHOLD_METERS, signal?: AbortSignal) {
+  const provenPairs = pairs.filter(isProvenFuelPair);
+  const storeBrands = enabledBrands.filter((brand) => brand.fuelBrandPair && provenPairs.includes(brand.fuelBrandPair));
+  const fuelLines = provenPairs.map((pair) => `  nwr["amenity"="fuel"]["brand"~"${fuelPatterns[pair]}",i](around:${radiusMeters},${center.lat},${center.lng});`);
   const storeLines = storeBrands.map((brand) => `  nwr["${brand.osmKey}"${brand.osmValue.includes("|") ? "~" : "="}"${brand.osmValue}"]["brand"~"${brand.osmBrandPattern}",i](around:${radiusMeters},${center.lat},${center.lng});`);
   const query = `[out:json][timeout:25];\n(\n${[...fuelLines, ...storeLines].join("\n")}\n);\nout center tags;`;
   const response = await fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: new URLSearchParams({ data: query }), signal });
@@ -31,9 +47,8 @@ export async function fetchFuelCombos(pairs: FuelBrand[], center: Coordinates, r
     const lat = element.lat ?? element.center?.lat; const lng = element.lon ?? element.center?.lon; const tags = element.tags ?? {};
     if (lat == null || lng == null) continue;
     if (tags.amenity === "fuel") {
-      const text = `${tags.brand ?? ""} ${tags.name ?? ""}`;
-      const brand = pairs.find((pair) => new RegExp(fuelPatterns[pair], "i").test(text));
-      if (brand) fuels.push({ id: String(element.id), name: tags.name || `${brand} Station`, brand, lat, lng, distanceKm: distanceKm(center, { lat, lng }), openingHours: tags.opening_hours, hasParking: tags.parking === "yes", hasToilets: tags.toilets === "yes", hasEv: tags["fuel:electricity"] === "yes" });
+      const brand = identifyFuelBrand(tags);
+      if (brand && provenPairs.includes(brand)) fuels.push({ id: String(element.id), name: tags.name || `${brand} Station`, brand, lat, lng, distanceKm: distanceKm(center, { lat, lng }), openingHours: tags.opening_hours, hasParking: tags.parking === "yes", hasToilets: tags.toilets === "yes", hasEv: tags["fuel:electricity"] === "yes" });
       continue;
     }
     const text = `${tags.brand ?? ""} ${tags.name ?? ""}`;

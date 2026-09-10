@@ -1,0 +1,21 @@
+"use client";
+
+import L from "leaflet";
+import { Circle, MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { getBrand } from "@/lib/brands";
+import { formatDistance } from "@/lib/distance";
+import { navigationUrl } from "@/lib/stores";
+import type { Coordinates, Store } from "@/lib/types";
+
+const icon = (store: Store) => {
+  const brand = getBrand(store.brandId);
+  return L.divIcon({ className: "leaflet-div-icon", html: `<div class="map-pin" style="background:${brand.color}"><span>${brand.shortName.slice(0, 2)}</span></div>`, iconSize: [34, 34], iconAnchor: [17, 32] });
+};
+
+export default function MapCanvas({ center, stores, radiusKm }: { center: Coordinates; stores: Store[]; radiusKm: number }) {
+  return <MapContainer key={`${center.lat}-${center.lng}`} center={[center.lat, center.lng]} zoom={radiusKm <= 1 ? 15 : 13} scrollWheelZoom>
+    <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <Circle center={[center.lat, center.lng]} radius={80} pathOptions={{ color: "#23735b", fillColor: "#23735b", fillOpacity: .18 }} />
+    {stores.map((store) => <Marker key={store.id} position={[store.lat, store.lng]} icon={icon(store)}><Popup><strong>{store.name}</strong><br />{formatDistance(store.distanceKm)}<br /><a href={navigationUrl(store)} target="_blank">นำทาง</a></Popup></Marker>)}
+  </MapContainer>;
+}

@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --orange:#F2661C;
+  --orange-dark:#D8500A;
+  --orange-tint:#FFF1E6;
+  --green:#0E8C4B;
+  --green-dark:#0A6B3A;
+  --green-tint:#EAF6EE;
+  --bg:#FFFCF8;
+  --surface:#FFFFFF;
+  --text:#1E241F;
+  --text-muted:#68706A;
+  --border:#E7E2D9;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
+h1,h2,h3,h4{font-family:'Prompt','Noto Sans Thai',system-ui,sans-serif;margin:0;}
+a{color:var(--text);text-decoration:none;}
+a:hover{color:var(--green);}
+button{font-family:inherit;cursor:pointer;}
+</style>
+</helmet>
+<div style="width:100%;min-height:1080px;background:var(--bg);">
+
+  <!-- TOP BAR -->
+  <div style="display:flex;align-items:center;gap:16px;padding:16px 32px;background:var(--surface);border-bottom:1px solid var(--border);">
+    <div style="width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </div>
+    <h1 style="font-size:18px;font-weight:700;">เกี่ยวกับ Klai</h1>
+  </div>
+
+  <div style="max-width:720px;margin:0 auto;padding:64px 32px 80px;">
+
+    <!-- APP IDENTITY -->
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:56px;">
+      <div style="width:138px;height:150px;margin-bottom:4px;">
+        <dc-import name="Mascot" hint-size="138,150"></dc-import>
+      </div>
+      <h2 style="font-size:28px;margin-bottom:4px;">Klai</h2>
+      <p style="font-size:14px;color:var(--orange);font-weight:700;margin-bottom:12px;">หาร้านสะดวกซื้อใกล้ตัว</p>
+      <p style="font-size:15.5px;color:var(--text-muted);line-height:1.7;max-width:440px;">หาร้านสะดวกซื้อ/คาเฟ่ที่ใกล้คุณที่สุด เลือกได้หลายแบรนด์พร้อมกัน ไม่ต้องเปิดแอปแผนที่ยี่ห้อไหนอีก ทำขึ้นเป็นโปรเจกต์อิสระ ใช้งานฟรี ไม่มีโฆษณา</p>
+    </div>
+
+    <!-- DATA SOURCE -->
+    <div style="margin-bottom:36px;">
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:12px;">ข้อมูลร้านค้ามาจากไหน</h3>
+      <p style="font-size:14.5px;color:var(--text-muted);line-height:1.8;">
+        Klai ดึงพิกัดร้านจากแบรนด์ที่คุณเลือก (7-Eleven, Café Amazon, อินทนิล, พันธุ์ไทย, Black Canyon, Chao Doi และอื่นๆ) สดจากฐานข้อมูลเปิด OpenStreetMap ทุกครั้งที่คุณค้นหา ไม่มีการเก็บข้อมูลตำแหน่งร้านไว้ในระบบของเราเอง เนื่องจากข้อมูลมาจากอาสาสมัครที่ช่วยกันปรับปรุงแผนที่ ความครบถ้วนของแต่ละแบรนด์ในแต่ละพื้นที่อาจไม่เท่ากัน หากพบพิกัดผิดพลาดสามารถแจ้งเราได้ที่ด้านล่าง
+      </p>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div style="display:flex;gap:14px;padding:20px;border-radius:16px;background:var(--orange-tint);margin-bottom:44px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange-dark)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      <p style="font-size:13.5px;color:var(--orange-dark);line-height:1.8;margin:0;">
+        "Klai" เป็นชื่อโปรเจกต์อิสระที่พัฒนาโดยนักพัฒนาอิสระ ใช้ชื่อเพื่อบอกฟังก์ชันการทำงานเท่านั้น ไม่ได้เป็นส่วนหนึ่ง ไม่ได้รับการสนับสนุน และไม่ได้รับการรับรองจากแบรนด์ใดๆ ที่ปรากฏในแอปแต่อย่างใด (รวมถึงแต่ไม่จำกัดเพียง 7-Eleven, ซีพี ออลล์, Café Amazon, PTT, อินทนิล, บางจาก, พันธุ์ไทย, PT, Black Canyon และ Chao Doi) เครื่องหมายการค้าทั้งหมดเป็นของเจ้าของลิขสิทธิ์แต่ละราย
+      </p>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div style="margin-bottom:52px;">
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:12px;">แจ้งปัญหาหรือข้อมูลผิดพลาด</h3>
+      <p style="font-size:14.5px;color:var(--text-muted);line-height:1.8;margin-bottom:20px;">พบพิกัดร้านผิด ร้านที่ปิดไปแล้ว หรือมีข้อเสนอแนะ บอกเราได้เลย</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;border:1.5px solid var(--border);font-size:14px;font-weight:600;color:var(--text);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+          ส่งอีเมลแจ้งปัญหา
+        </a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;border:1.5px solid var(--border);font-size:14px;font-weight:600;color:var(--text);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4"></path><path d="M4 4h13l-2.5 4L17 12H4"></path></svg>
+          แจ้งพิกัดผิด
+        </a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="border-top:1px solid var(--border);padding-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <span style="font-size:12.5px;color:var(--text-muted);">เวอร์ชัน 0.1 (Beta)</span>
+      <span style="font-size:12.5px;color:var(--text-muted);">© 2026 Klai</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

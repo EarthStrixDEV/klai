@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --orange:#F2661C;
+  --orange-dark:#D8500A;
+  --orange-tint:#FFF1E6;
+  --green:#0E8C4B;
+  --green-dark:#0A6B3A;
+  --green-tint:#EAF6EE;
+  --bg:#FFFCF8;
+  --surface:#FFFFFF;
+  --text:#1E241F;
+  --text-muted:#68706A;
+  --border:#E7E2D9;
+  /* Brand Registry colors — ชุดเดียวกับหน้า Map */
+  --c-7eleven:#F2661C;
+  --c-amazon:#256D3B;
+  --c-amazon-tint:#E8F3EC;
+  --c-inthanin:#8BC34A;
+  --c-inthanin-tint:#F1F8E9;
+  --c-punthai:#8B5A2B;
+  --c-punthai-tint:#F5EDE6;
+  --c-blackcanyon:#C0392B;
+  --c-blackcanyon-tint:#FBEAE8;
+  --c-chaodoi:#8B6FCE;
+  --c-chaodoi-tint:#F1EDFA;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
+h1,h2,h3,h4{font-family:'Prompt','Noto Sans Thai',system-ui,sans-serif;margin:0;}
+a{color:var(--text);text-decoration:none;}
+a:hover{color:var(--green);}
+button{font-family:inherit;cursor:pointer;}
+</style>
+</helmet>
+<div style="width:100%;min-height:1000px;background:var(--bg);position:relative;">
+
+  <!-- TOP BAR -->
+  <div style="display:flex;align-items:center;gap:16px;padding:16px 32px;background:var(--surface);border-bottom:1px solid var(--border);">
+    <div style="width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </div>
+    <h1 style="font-size:18px;font-weight:700;flex-grow:1;">ร้านใกล้คุณ</h1>
+    <span style="font-family:'Prompt',sans-serif;font-size:16px;">Klai</span>
+    <div style="width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+    </div>
+  </div>
+
+  <div style="max-width:760px;margin:0 auto;padding:24px 32px 120px;">
+
+    <!-- PAGE DESCRIPTION -->
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin:0 0 20px;">รายชื่อร้านจากแบรนด์ที่เลือกไว้ทั้งหมดรอบตัวคุณ เรียงจากใกล้ไปไกล เลือกแบรนด์ ปรับรัศมี หรือค้นหาชื่อร้าน/ย่านที่ต้องการได้ด้านล่าง</p>
+
+    <!-- SEARCH BAR -->
+    <div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:18px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <span style="font-size:14.5px;color:var(--text-muted);flex-grow:1;">ค้นหาชื่อร้าน หรือย่าน...</span>
+    </div>
+
+    <!-- BRAND FILTER (multi-select) — chip สีเดียวกับหน้า Map ใช้ state ร่วมกัน -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--text-muted);margin-right:2px;">แบรนด์:</span>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--c-7eleven);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>7-Eleven
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--c-inthanin);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>อินทนิล
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--c-amazon);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>Café Amazon
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--c-punthai);"></span>พันธุ์ไทย
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--c-blackcanyon);"></span>Black Canyon
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--c-chaodoi);"></span>Chao Doi
+      </div>
+    </div>
+
+    <!-- RADIUS FILTER -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--text-muted);margin-right:2px;">รัศมี:</span>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">500 ม.</div>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">1 กม.</div>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--orange);color:#FFFFFF;font-size:13.5px;font-weight:700;">3 กม.</div>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">5 กม.</div>
+    </div>
+
+    <!-- AMENITY FILTER -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:22px;flex-wrap:wrap;">
+      <div style="padding:7px 14px;border-radius:100px;background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;">เปิด 24 ชม.</div>
+      <div style="padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">มีที่จอดรถ</div>
+      <div style="padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">มี ATM</div>
+      <div style="padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">อยู่ในปั๊มน้ำมัน</div>
+    </div>
+
+    <!-- SUBHEADER -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <span style="font-size:14px;color:var(--text-muted);">พบ 12 ร้านในรัศมี 3 กม.</span>
+      <div style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border);border-radius:100px;font-size:13.5px;font-weight:600;color:var(--text);">
+        เรียงตามระยะทาง
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </div>
+
+    <!-- STORE CARDS -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--orange-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">7-Eleven สาขาสยามสแควร์</div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.พระรามที่ 1 แขวงปทุมวัน · เปิด 24 ชม.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">320 ม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--orange);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--c-amazon-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--c-amazon)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">Café Amazon สาขาอโศก ทาวเวอร์</div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.สุขุมวิท แขวงคลองเตยเหนือ · เปิด 24 ชม.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">480 ม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--c-amazon);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-amazon)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--orange-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">7-Eleven สาขาทองหล่อ ซอย 10</div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.สุขุมวิท 55 แขวงคลองตันเหนือ · เปิด 24 ชม.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">610 ม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--orange);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--c-inthanin-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--c-inthanin)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">อินทนิล สาขาเอกมัย ซอย 4</div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.สุขุมวิท 63 แขวงคลองตันเหนือ · เปิด 06:00-22:00</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">750 ม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--c-inthanin);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-inthanin)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--orange-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">7-Eleven สาขาพร้อมพงษ์</div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.สุขุมวิท แขวงคลองตันเหนือ · เปิด 24 ชม.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">890 ม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--orange);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--c-punthai-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--c-punthai)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">พันธุ์ไทย สาขาอ่อนนุช 17</div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.สุขุมวิท แขวงสวนหลวง · เปิด 05:30-21:00</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">1.1 กม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--c-punthai);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-punthai)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FLOATING TOGGLE -->
+  <div style="position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:var(--orange);color:#FFFFFF;padding:14px 24px;border-radius:100px;font-size:14.5px;font-weight:700;box-shadow:0 10px 30px rgba(216,80,10,0.35);">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+    ดูบนแผนที่
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

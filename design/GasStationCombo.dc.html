@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --orange:#F2661C;
+  --orange-dark:#D8500A;
+  --orange-tint:#FFF1E6;
+  --green:#0E8C4B;
+  --green-dark:#0A6B3A;
+  --green-tint:#EAF6EE;
+  --fuel:#3457A6;
+  --fuel-tint:#EAEEF8;
+  --fuel-bangchak:#1D8A6E;
+  --fuel-bangchak-tint:#E6F4EF;
+  --fuel-pt:#A6303F;
+  --fuel-pt-tint:#F8E9EB;
+  --bg:#FFFCF8;
+  --surface:#FFFFFF;
+  --text:#1E241F;
+  --text-muted:#68706A;
+  --border:#E7E2D9;
+  /* Brand Registry colors — ชุดเดียวกับหน้า Map / List Store */
+  --c-7eleven:#F2661C;
+  --c-amazon:#256D3B;
+  --c-inthanin:#8BC34A;
+  --c-punthai:#8B5A2B;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
+h1,h2,h3,h4{font-family:'Prompt','Noto Sans Thai',system-ui,sans-serif;margin:0;}
+a{color:var(--text);text-decoration:none;}
+a:hover{color:var(--green);}
+button{font-family:inherit;cursor:pointer;}
+</style>
+</helmet>
+<div style="width:100%;min-height:1020px;background:var(--bg);position:relative;">
+
+  <!-- TOP BAR -->
+  <div style="display:flex;align-items:center;gap:16px;padding:16px 32px;background:var(--surface);border-bottom:1px solid var(--border);">
+    <div style="width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </div>
+    <h1 style="font-size:18px;font-weight:700;flex-grow:1;">ปั๊มน้ำมัน Combo Finder</h1>
+    <span style="font-family:'Prompt',sans-serif;font-size:16px;">Klai</span>
+  </div>
+
+  <div style="max-width:760px;margin:0 auto;padding:24px 32px 40px;">
+
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin:0 0 20px;">แวะเติมน้ำมันพร้อมช้อปหรือจิบกาแฟได้ในที่เดียว เลือกดูเฉพาะปั๊มที่มีร้าน/คาเฟ่ในเครืออยู่ในสถานี — ครอบคลุม PTT, บางจาก และ PT</p>
+
+    <!-- FUEL BRAND FILTER (multi-select) -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--text-muted);margin-right:2px;">ปั๊มน้ำมัน:</span>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--fuel);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>PTT
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--fuel-bangchak);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>บางจาก
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--fuel-pt);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>PT
+      </div>
+    </div>
+
+    <!-- RADIUS FILTER -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--text-muted);margin-right:2px;">รัศมี:</span>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">3 กม.</div>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--orange);color:#FFFFFF;font-size:13.5px;font-weight:700;">5 กม.</div>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">10 กม.</div>
+      <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">20 กม.</div>
+    </div>
+
+    <div style="font-size:13.5px;color:var(--text-muted);margin-bottom:16px;">พบ 4 ปั๊มในรัศมี 5 กม.</div>
+
+    <!-- COMBO CARDS -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Card 1: PTT — มีทั้ง 7-Eleven และ Café Amazon (ตัวอย่างปั๊มที่จับคู่ได้ 2 แบรนด์พร้อมกัน) -->
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="position:relative;width:48px;height:48px;flex-shrink:0;">
+          <div style="width:48px;height:48px;border-radius:12px;background:var(--fuel-tint);display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fuel)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="9" height="18" rx="1"></rect><path d="M13 8h3a2 2 0 0 1 2 2v7a1.5 1.5 0 0 0 3 0v-6l-2-2"></path></svg>
+          </div>
+          <div style="position:absolute;bottom:-6px;right:8px;width:22px;height:22px;border-radius:7px;background:var(--c-7eleven);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+          </div>
+          <div style="position:absolute;bottom:-6px;right:-10px;width:22px;height:22px;border-radius:7px;background:var(--c-amazon);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+          </div>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:5px;">PTT ถนนพระราม 9</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:12px;font-weight:700;color:var(--c-7eleven);background:var(--orange-tint);padding:3px 9px;border-radius:100px;">7-Eleven 24 ชม.</span>
+            <span style="font-size:12px;font-weight:700;color:var(--c-amazon);background:#E8F3EC;padding:3px 9px;border-radius:100px;">Café Amazon</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">1.8 กม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--fuel);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fuel)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: PTT — มี 7-Eleven -->
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="position:relative;width:48px;height:48px;flex-shrink:0;">
+          <div style="width:48px;height:48px;border-radius:12px;background:var(--fuel-tint);display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fuel)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="9" height="18" rx="1"></rect><path d="M13 8h3a2 2 0 0 1 2 2v7a1.5 1.5 0 0 0 3 0v-6l-2-2"></path></svg>
+          </div>
+          <div style="position:absolute;bottom:-6px;right:-6px;width:24px;height:24px;border-radius:8px;background:var(--c-7eleven);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+          </div>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:5px;">PTT สุขุมวิท 71</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;color:var(--text-muted);">มีจุดชาร์จ EV</span>
+            <span style="width:3px;height:3px;border-radius:50%;background:var(--border);"></span>
+            <span style="font-size:12px;font-weight:700;color:var(--c-7eleven);background:var(--orange-tint);padding:3px 9px;border-radius:100px;">7-Eleven 24 ชม.</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">2.4 กม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--fuel);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fuel)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: บางจาก — มีอินทนิล -->
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="position:relative;width:48px;height:48px;flex-shrink:0;">
+          <div style="width:48px;height:48px;border-radius:12px;background:var(--fuel-bangchak-tint);display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fuel-bangchak)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="9" height="18" rx="1"></rect><path d="M13 8h3a2 2 0 0 1 2 2v7a1.5 1.5 0 0 0 3 0v-6l-2-2"></path></svg>
+          </div>
+          <div style="position:absolute;bottom:-6px;right:-6px;width:24px;height:24px;border-radius:8px;background:var(--c-inthanin);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+          </div>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:5px;">บางจาก ศรีนครินทร์</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;color:var(--text-muted);">มีห้องน้ำ · ที่จอดรถกว้าง</span>
+            <span style="width:3px;height:3px;border-radius:50%;background:var(--border);"></span>
+            <span style="font-size:12px;font-weight:700;color:var(--c-inthanin);background:var(--fuel-bangchak-tint);padding:3px 9px;border-radius:100px;">อินทนิล 06:00-22:00</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">3.6 กม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--fuel-bangchak);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fuel-bangchak)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: PT — มีพันธุ์ไทย -->
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="position:relative;width:48px;height:48px;flex-shrink:0;">
+          <div style="width:48px;height:48px;border-radius:12px;background:var(--fuel-pt-tint);display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--fuel-pt)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="9" height="18" rx="1"></rect><path d="M13 8h3a2 2 0 0 1 2 2v7a1.5 1.5 0 0 0 3 0v-6l-2-2"></path></svg>
+          </div>
+          <div style="position:absolute;bottom:-6px;right:-6px;width:24px;height:24px;border-radius:8px;background:var(--c-punthai);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+          </div>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:5px;">PT บางนา-ตราด กม.4</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:12.5px;color:var(--text-muted);">จุดพักรถ 24 ชม.</span>
+            <span style="width:3px;height:3px;border-radius:50%;background:var(--border);"></span>
+            <span style="font-size:12px;font-weight:700;color:var(--c-punthai);background:#F5EDE6;padding:3px 9px;border-radius:100px;">พันธุ์ไทย 05:30-21:00</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">4.2 กม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--fuel-pt);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--fuel-pt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="font-size:12.5px;color:var(--text-muted);line-height:1.7;margin-top:20px;">Black Canyon และ Chao Doi ไม่แสดงในหน้านี้ เพราะไม่ได้ผูกกับปั๊มน้ำมันแบรนด์ใดแบรนด์หนึ่งเป็นพิเศษ — ค้นหาได้ตามปกติที่หน้า Map และ List Store</p>
+  </div>
+
+  <!-- FLOATING TOGGLE -->
+  <div style="position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:var(--orange);color:#FFFFFF;padding:14px 24px;border-radius:100px;font-size:14.5px;font-weight:700;box-shadow:0 10px 30px rgba(216,80,10,0.35);">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+    ดูบนแผนที่
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

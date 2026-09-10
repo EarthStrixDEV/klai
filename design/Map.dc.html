@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --orange:#F2661C;
+  --orange-dark:#D8500A;
+  --orange-tint:#FFF1E6;
+  --green:#0E8C4B;
+  --green-dark:#0A6B3A;
+  --green-tint:#EAF6EE;
+  --bg:#FFFCF8;
+  --surface:#FFFFFF;
+  --text:#1E241F;
+  --text-muted:#68706A;
+  --border:#E7E2D9;
+  /* Brand Registry colors — 1 สีต่อ 1 แบรนด์ ใช้ร่วมกันทั้ง pin บนแผนที่และ badge ในหน้า List Store */
+  --c-7eleven:#F2661C;
+  --c-amazon:#256D3B;
+  --c-amazon-tint:#E8F3EC;
+  --c-inthanin:#8BC34A;
+  --c-inthanin-tint:#F1F8E9;
+  --c-punthai:#8B5A2B;
+  --c-punthai-tint:#F5EDE6;
+  --c-blackcanyon:#C0392B;
+  --c-blackcanyon-tint:#FBEAE8;
+  --c-chaodoi:#8B6FCE;
+  --c-chaodoi-tint:#F1EDFA;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
+h1,h2,h3,h4{font-family:'Prompt','Noto Sans Thai',system-ui,sans-serif;margin:0;}
+a{color:var(--text);text-decoration:none;}
+a:hover{color:var(--green);}
+button{font-family:inherit;cursor:pointer;}
+</style>
+</helmet>
+<div style="width:100%;height:900px;display:flex;flex-direction:column;background:var(--bg);">
+
+  <!-- TOP BAR -->
+  <div style="display:flex;align-items:center;gap:16px;padding:16px 32px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
+    <div style="width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </div>
+    <div style="flex-grow:1;display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:11px 16px;max-width:480px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <span style="font-size:14.5px;color:var(--text-muted);">ค้นหาพื้นที่ หรือชื่อถนน</span>
+    </div>
+    <div style="flex-grow:1;"></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-family:'Prompt',sans-serif;font-size:16px;">Klai</span>
+    </div>
+    <div style="width:40px;height:40px;border-radius:10px;background:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="2" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="22"></line><line x1="2" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="22" y2="12"></line></svg>
+    </div>
+  </div>
+
+  <!-- BRAND FILTER CHIPS (multi-select) — จุดสีของแต่ละ chip คือ legend ของ pin สีเดียวกันบนแผนที่ -->
+  <div style="display:flex;align-items:center;gap:8px;padding:12px 32px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;">
+    <span style="font-size:13px;color:var(--text-muted);margin-right:2px;">แบรนด์:</span>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--c-7eleven);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>7-Eleven
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--c-inthanin);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>อินทนิล
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--c-amazon);"></span>Café Amazon
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--c-punthai);"></span>พันธุ์ไทย
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--c-blackcanyon);"></span>Black Canyon
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--c-chaodoi);"></span>Chao Doi
+    </div>
+  </div>
+
+  <!-- FILTER CHIPS -->
+  <div style="display:flex;align-items:center;gap:10px;padding:14px 32px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
+    <span style="font-size:13px;color:var(--text-muted);margin-right:6px;">รัศมี:</span>
+    <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">500 ม.</div>
+    <div style="padding:8px 16px;border-radius:100px;background:var(--orange);color:#FFFFFF;font-size:13.5px;font-weight:700;">1 กม.</div>
+    <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">3 กม.</div>
+    <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">5 กม.</div>
+  </div>
+
+  <!-- MAP CANVAS -->
+  <div style="position:relative;flex-grow:1;background:var(--green-tint);overflow:hidden;">
+    <div style="position:absolute;top:120px;left:0;right:0;height:1px;background:#FFFFFF;"></div>
+    <div style="position:absolute;top:320px;left:0;right:0;height:1px;background:#FFFFFF;"></div>
+    <div style="position:absolute;top:560px;left:0;right:0;height:1px;background:#FFFFFF;"></div>
+    <div style="position:absolute;top:0;bottom:0;left:220px;width:1px;background:#FFFFFF;"></div>
+    <div style="position:absolute;top:0;bottom:0;left:520px;width:1px;background:#FFFFFF;"></div>
+    <div style="position:absolute;top:0;bottom:0;left:820px;width:1px;background:#FFFFFF;"></div>
+    <div style="position:absolute;top:0;bottom:0;left:1080px;width:1px;background:#FFFFFF;"></div>
+
+    <!-- user location dot -->
+    <div style="position:absolute;top:340px;left:540px;width:44px;height:44px;border-radius:50%;background:rgba(37,99,235,0.15);display:flex;align-items:center;justify-content:center;">
+      <div style="width:16px;height:16px;border-radius:50%;background:#2563EB;border:3px solid #FFFFFF;box-shadow:0 0 0 1px rgba(37,99,235,0.4);"></div>
+    </div>
+
+    <!-- store pins -->
+    <svg style="position:absolute;top:150px;left:180px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--orange)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <svg style="position:absolute;top:230px;left:700px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-inthanin)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <svg style="position:absolute;top:420px;left:280px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--orange)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <svg style="position:absolute;top:480px;left:950px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-inthanin)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <svg style="position:absolute;top:120px;left:960px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--orange)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+
+    <!-- selected / nearest pin, highlighted (สี pin = สีแบรนด์ 7-Eleven ของร้านนี้เอง, วง glow รอบๆ คือ indicator "ใกล้สุด" ไม่ใช่สีแบรนด์) -->
+    <div style="position:absolute;top:388px;left:606px;width:52px;height:52px;border-radius:50%;background:rgba(30,36,31,0.14);"></div>
+    <svg style="position:absolute;top:396px;left:614px;" width="34" height="34" viewBox="0 0 24 24" fill="var(--c-7eleven)" stroke="#FFFFFF" stroke-width="1.5"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+
+    <!-- bottom sheet -->
+    <div style="position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:420px;background:var(--surface);border-radius:20px 20px 0 0;box-shadow:0 -14px 40px rgba(30,36,31,0.14);padding:14px 24px 24px;border:1px solid var(--border);border-bottom:none;">
+      <div style="width:40px;height:4px;border-radius:100px;background:var(--border);margin:0 auto 18px;"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <span style="width:9px;height:9px;border-radius:50%;background:var(--c-7eleven);flex-shrink:0;"></span>
+            <span style="font-size:16px;font-weight:700;">7-Eleven สาขาสยามสแควร์</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.พระรามที่ 1 แขวงปทุมวัน</div>
+        </div>
+        <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:100px;white-space:nowrap;">350 ม.</div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <a href="#" style="flex-grow:1;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--orange);color:#FFFFFF;padding:13px;border-radius:12px;font-size:14.5px;font-weight:700;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          นำทาง
+        </a>
+        <a href="#" style="flex-grow:1;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--text);padding:13px;border-radius:12px;font-size:14.5px;font-weight:700;border:1.5px solid var(--border);">
+          ดูรายละเอียด
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

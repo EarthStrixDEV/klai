@@ -40,6 +40,12 @@ describe("identifyFuelBrand", () => {
     expect(identifyFuelBrand({ brand: "PT" })).toBe("PT");
   });
 
+  it("identifies Caltex under either its old or rebranded Star Petroleum name", () => {
+    expect(identifyFuelBrand({ brand: "Caltex" })).toBe("Caltex");
+    expect(identifyFuelBrand({ brand: "Star Petroleum" })).toBe("Caltex");
+    expect(identifyFuelBrand({ brand: "Star" })).toBe("Caltex");
+  });
+
   it("returns null when no known fuel brand pattern matches", () => {
     expect(identifyFuelBrand({ brand: "Shell" })).toBeNull();
     expect(identifyFuelBrand({})).toBeNull();
@@ -51,5 +57,6 @@ describe("isProvenFuelPair", () => {
     expect(isProvenFuelPair("PTT")).toBe(true);
     expect(isProvenFuelPair("Bangchak")).toBe(false);
     expect(isProvenFuelPair("PT")).toBe(false);
+    expect(isProvenFuelPair("Caltex")).toBe(false);
   });
 });

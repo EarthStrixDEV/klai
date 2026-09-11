@@ -7,6 +7,9 @@ export const brands: Brand[] = [
   { id: "punthai", name: "พันธุ์ไทย", shortName: "พันธุ์ไทย", color: "#8a5638", bg: "#f7eee8", osmKey: "amenity", osmValue: "cafe", osmBrandPattern: "Punthai|พันธุ์ไทย", fuelBrandPair: "PT", enabled: true },
   { id: "black-canyon", name: "Black Canyon", shortName: "Black Canyon", color: "#bd312b", bg: "#fdeceb", osmKey: "amenity", osmValue: "cafe|restaurant", osmBrandPattern: "Black Canyon", enabled: true },
   { id: "chao-doi", name: "Chao Doi", shortName: "Chao Doi", color: "#7c4d9b", bg: "#f3ebf8", osmKey: "amenity", osmValue: "cafe", osmBrandPattern: "Chao Doi|ชาวดอย", enabled: false },
+  { id: "ptt", name: "PTT", shortName: "PTT", color: "#3457a6", bg: "#eaeef8", osmKey: "amenity", osmValue: "fuel", osmBrandPattern: "PTT|ปตท", enabled: true },
+  { id: "cj-more", name: "CJ More", shortName: "CJ More", color: "#d6336c", bg: "#fbe7ee", osmKey: "shop", osmValue: "convenience", osmBrandPattern: "CJ More|ซีเจ มอร์", enabled: true },
+  { id: "jiffy", name: "Jiffy", shortName: "Jiffy", color: "#14919b", bg: "#e3f5f6", osmKey: "shop", osmValue: "convenience", osmBrandPattern: "Jiffy", fuelBrandPair: "Caltex", enabled: true },
 ];
 
 export const enabledBrands = brands.filter((brand) => brand.enabled);

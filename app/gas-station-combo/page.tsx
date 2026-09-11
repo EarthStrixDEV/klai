@@ -7,7 +7,7 @@ import { formatDistance } from "@/lib/distance";
 import { FUEL_PROXIMITY_THRESHOLD_METERS, fetchFuelCombos, isProvenFuelPair, provenFuelPairs, type FuelBrand, type FuelCombo } from "@/lib/combo";
 import { requestCoordinates } from "@/lib/geolocation";
 
-const pairLabels: Record<FuelBrand, string> = { PTT: "PTT + 7-Eleven / Amazon", Bangchak: "บางจาก + อินทนิล", PT: "PT + พันธุ์ไทย" };
+const pairLabels: Record<FuelBrand, string> = { PTT: "PTT + 7-Eleven / Amazon", Bangchak: "บางจาก + อินทนิล", PT: "PT + พันธุ์ไทย", Caltex: "Caltex / Star Petroleum + Jiffy" };
 
 export default function ComboPage() {
   const [combos, setCombos] = useState<FuelCombo[]>([]);

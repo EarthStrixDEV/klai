@@ -33,6 +33,12 @@
   --c-blackcanyon-tint:#FBEAE8;
   --c-chaodoi:#8B6FCE;
   --c-chaodoi-tint:#F1EDFA;
+  --c-ptt:#3457A6;
+  --c-ptt-tint:#EAEEF8;
+  --c-cjmore:#D6336C;
+  --c-cjmore-tint:#FBE7EE;
+  --c-jiffy:#14919B;
+  --c-jiffy-tint:#E3F5F6;
 }
 *{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
@@ -83,6 +89,15 @@ button{font-family:inherit;cursor:pointer;}
     <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
       <span style="width:8px;height:8px;border-radius:50%;background:var(--c-chaodoi);"></span>Chao Doi
     </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--c-ptt);color:#FFFFFF;font-size:12.5px;font-weight:700;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#FFFFFF;"></span>PTT
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--c-cjmore);"></span>CJ More
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--c-jiffy);"></span>Jiffy
+    </div>
   </div>
 
   <!-- FILTER CHIPS -->
@@ -115,6 +130,10 @@ button{font-family:inherit;cursor:pointer;}
     <svg style="position:absolute;top:420px;left:280px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--orange)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
     <svg style="position:absolute;top:480px;left:950px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-inthanin)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
     <svg style="position:absolute;top:120px;left:960px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--orange)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <!-- PTT (ปั๊มน้ำมัน — ค้นหาอิสระตั้งแต่ v0.6 สีเดียวกับหมวดปั๊มทุกที่) -->
+    <svg style="position:absolute;top:260px;left:1000px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-ptt)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <!-- CJ More -->
+    <svg style="position:absolute;top:540px;left:640px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-cjmore)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
 
     <!-- selected / nearest pin, highlighted (สี pin = สีแบรนด์ 7-Eleven ของร้านนี้เอง, วง glow รอบๆ คือ indicator "ใกล้สุด" ไม่ใช่สีแบรนด์) -->
     <div style="position:absolute;top:388px;left:606px;width:52px;height:52px;border-radius:50%;background:rgba(30,36,31,0.14);"></div>

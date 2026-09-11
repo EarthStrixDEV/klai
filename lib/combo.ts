@@ -2,14 +2,15 @@ import { enabledBrands, getBrand } from "./brands";
 import { distanceKm } from "./distance";
 import type { BrandId, Coordinates, Store } from "./types";
 
-export type FuelBrand = "PTT" | "Bangchak" | "PT";
+export type FuelBrand = "PTT" | "Bangchak" | "PT" | "Caltex";
 export type FuelStation = Coordinates & { id: string; name: string; brand: FuelBrand; distanceKm: number; openingHours?: string; hasParking?: boolean; hasToilets?: boolean; hasEv?: boolean };
 export type FuelCombo = FuelStation & { pairedStores: Store[] };
 
 // สเปก spec/modules/05-gas-station-combo.md แนะนำเริ่มทดสอบที่ 50-80 เมตร ยังไม่ verify กับข้อมูลจริง
 export const FUEL_PROXIMITY_THRESHOLD_METERS = 80;
 
-export const fuelPatterns: Record<FuelBrand, string> = { PTT: "PTT|ปตท", Bangchak: "Bangchak|บางจาก", PT: "^PT$|PT Station|พีที" };
+// Caltex/Star Petroleum: ชื่อแบรนด์ OSM หลัง rebrand ยังไม่ verify (spec/klai-spec.md Open Questions) จึงรองรับทั้งสองชื่อ
+export const fuelPatterns: Record<FuelBrand, string> = { PTT: "PTT|ปตท", Bangchak: "Bangchak|บางจาก", PT: "^PT$|PT Station|พีที", Caltex: "Caltex|Star Petroleum|^Star$" };
 
 // ตาม spec/modules/05-gas-station-combo.md: มีแค่ PTT ที่ผ่าน prototype จริง คู่อื่นยังไม่ verify กับข้อมูล OSM จริง ห้ามให้ผู้ใช้เลือกได้
 export const provenFuelPairs: FuelBrand[] = ["PTT"];

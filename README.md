@@ -35,14 +35,16 @@
 | 🧮 | **Distance First** | คำนวณ Haversine และเรียงร้านจากใกล้ไปไกลบน browser |
 | 🧺 | **Shopping List** | เพิ่มของ แบ่งหมวด ปรับจำนวน ติ๊กของ และบันทึกไว้ในเครื่อง |
 | 💬 | **Share to LINE** | สร้างข้อความลิสต์พร้อมส่งต่อ หรือใช้ Web Share / คัดลอกข้อความ |
-| ⛽ | **Combo Prototype** | ทดลองจับคู่ PTT กับร้านในเครือจากระยะห่างของจุดข้อมูล OSM |
+| ⛽ | **Combo Prototype** | ทดลองจับคู่ปั๊มน้ำมันกับร้านในเครือจากระยะห่างของจุดข้อมูล OSM — เริ่มจาก PTT ก่อน คู่ Caltex/Star Petroleum + Jiffy ยังรอ verify |
 | 🧭 | **One-tap Navigation** | เปิดเส้นทางไปยังจุดหมายด้วย Google Maps โดยไม่ใช้ API key |
 
 ### แบรนด์ที่ค้นหาได้
 
-`7-Eleven` · `Café Amazon` · `อินทนิล` · `พันธุ์ไทย` · `Black Canyon`
+`7-Eleven` · `Café Amazon` · `อินทนิล` · `พันธุ์ไทย` · `Black Canyon` · `PTT` · `CJ More` · `Jiffy`
 
 > `Chao Doi` เตรียมไว้ใน Brand Registry แต่ยังไม่เปิดใช้จนกว่าจะยืนยันรูปแบบ tag ใน OSM ได้ค่ะ
+>
+> ตั้งแต่ v0.6 `PTT` ค้นหาได้อิสระผ่าน Map/List Store เหมือนแบรนด์อื่น (แสดงทุกสาขา ไม่ใช่แค่สาขาที่มีร้านในเครือ) แยกจากโหมด Combo ที่กรองเฉพาะปั๊มที่จับคู่กับร้านสำเร็จ
 
 ## 🪄 User flow
 
@@ -84,7 +86,7 @@ npm run dev
 | `/map` | แผนที่หลายแบรนด์, search, radius และ selected-store sheet |
 | `/stores` | รายชื่อร้านพร้อมตัวกรองแบบละเอียด |
 | `/shopping-list` | เช็กลิสต์แบ่งหมวดและเครื่องมือแชร์ |
-| `/gas-station-combo` | PTT Combo prototype จาก proximity matching |
+| `/gas-station-combo` | Gas Station Combo prototype จาก proximity matching (PTT proven, คู่อื่นรอ verify) |
 | `/about` | ที่มา Disclaimer และ OpenStreetMap attribution |
 
 ## 🧠 ทำงานอย่างไร

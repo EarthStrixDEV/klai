@@ -1,4 +1,4 @@
-import { Clock3, ExternalLink, Landmark, MapPin, Navigation, ParkingCircle } from "lucide-react";
+import { Clock3, ExternalLink, Fuel, Landmark, MapPin, Navigation, ParkingCircle } from "lucide-react";
 import { getBrand } from "@/lib/brands";
 import { formatDistance } from "@/lib/distance";
 import { navigationUrl } from "@/lib/stores";
@@ -6,9 +6,10 @@ import type { Store } from "@/lib/types";
 
 export function StoreCard({ store, compact = false }: { store: Store; compact?: boolean }) {
   const brand = getBrand(store.brandId);
+  const Icon = brand.osmValue === "fuel" ? Fuel : MapPin;
   return <article className="surface rounded-2xl p-4 md:p-5">
     <div className="flex items-start gap-3">
-      <span className="mt-1 grid size-11 shrink-0 place-items-center rounded-xl" style={{ background: brand.bg, color: brand.color }}><MapPin size={22} /></span>
+      <span className="mt-1 grid size-11 shrink-0 place-items-center rounded-xl" style={{ background: brand.bg, color: brand.color }}><Icon size={22} /></span>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2"><h3 className="display-font font-bold">{store.name}</h3><span className="rounded-full px-2 py-1 text-[11px] font-bold" style={{ color: brand.color, background: brand.bg }}>{brand.name}</span></div>
         <p className="mt-1 text-sm text-[var(--muted)]">{store.address || "ข้อมูลจาก OpenStreetMap"} · <strong className="text-[var(--green-dark)]">{formatDistance(store.distanceKm)}</strong></p>

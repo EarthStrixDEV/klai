@@ -6,7 +6,10 @@ export type BrandId =
   | "inthanin"
   | "punthai"
   | "black-canyon"
-  | "chao-doi";
+  | "chao-doi"
+  | "ptt"
+  | "cj-more"
+  | "jiffy";
 
 export type Brand = {
   id: BrandId;
@@ -17,7 +20,7 @@ export type Brand = {
   osmKey: "shop" | "amenity";
   osmValue: string;
   osmBrandPattern: string;
-  fuelBrandPair?: "PTT" | "Bangchak" | "PT";
+  fuelBrandPair?: "PTT" | "Bangchak" | "PT" | "Caltex";
   enabled: boolean;
 };
 

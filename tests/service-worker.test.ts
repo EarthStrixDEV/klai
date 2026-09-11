@@ -18,10 +18,13 @@ describe("service worker data hosts", () => {
     expect(missing, `sw.js ไม่ได้แคช host เหล่านี้: ${missing.join(", ")}`).toEqual([]);
   });
 
-  it("caches the routes that have pages", () => {
+  // อ่านจาก SiteHeader แทนการเขียนรายชื่อซ้ำ ไม่งั้น test จะสะท้อนสิ่งที่ sw.js มีอยู่แล้วแทนที่จะตรวจว่าครบ
+  it("precaches every page reachable from the main navigation", () => {
     const worker = readSource("public/sw.js");
-    for (const route of ["/map", "/stores", "/favorites", "/emergency", "/shopping-list", "/about"]) {
-      expect(worker).toContain(`"${route}"`);
-    }
+    const navRoutes = [...readSource("components/SiteHeader.tsx").matchAll(/\["(\/[a-z-]*)"/g)].map((match) => match[1]);
+
+    expect(navRoutes.length).toBeGreaterThan(1);
+    const missing = navRoutes.filter((route) => !worker.includes(`"${route}"`));
+    expect(missing, `sw.js ไม่ได้แคชหน้าเหล่านี้ที่มีในเมนู: ${missing.join(", ")}`).toEqual([]);
   });
 });

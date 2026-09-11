@@ -5,7 +5,7 @@ const DATA_CACHE = "klai-data-v1";
 const KEEP = [SHELL_CACHE, DATA_CACHE];
 
 // หน้าหลักที่อยากให้เปิดได้ตอนออฟไลน์
-const SHELL_ROUTES = ["/", "/map", "/stores", "/favorites", "/shopping-list", "/emergency", "/about"];
+const SHELL_ROUTES = ["/", "/map", "/stores", "/favorites", "/shopping-list", "/gas-station-combo", "/emergency", "/about"];
 
 self.addEventListener("install", (event) => {
   // แคชทีละหน้า ไม่ใช้ addAll เพราะถ้าหน้าใดหน้าหนึ่งพลาด (เช่น host ไม่ rewrite /map ให้)

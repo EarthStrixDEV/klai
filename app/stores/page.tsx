@@ -8,6 +8,7 @@ import { BrandChips } from "@/components/BrandChips";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { PageFrame } from "@/components/PageFrame";
 import { StatusPanel } from "@/components/StatusPanel";
+import { StoreBadges } from "@/components/StoreBadges";
 import { StoreCard } from "@/components/StoreCard";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useNearbyStores } from "@/hooks/useNearbyStores";
@@ -60,7 +61,7 @@ function StoresPageContent() {
         key={store.id}
         store={store}
         actions={<FavoriteButton store={{ id: store.id, name: store.name, brandId: store.brandId, lat: store.lat, lng: store.lng }} saved={isFavorite(favorites, store.id)} onToggle={toggle} />}
-        badges={destination ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-bold text-[var(--green-dark)]">อยู่ระหว่างทาง</span> : undefined}
+        badges={<StoreBadges brandId={store.brandId} alongRoute={Boolean(destination)} />}
         footer={<a href={shareStoreUrl(store)} target="_blank" rel="noreferrer" className="btn-secondary mt-4 w-full !py-2.5 text-sm"><Share2 size={16} /> ส่งพิกัดไป LINE</a>}
       />)}</div>{!filtered.length && <div className="surface rounded-2xl p-10 text-center"><p className="font-semibold">ไม่พบร้านที่ตรงกับตัวกรอง</p><button className="mt-3 text-sm font-bold text-[var(--orange)]" onClick={() => { setSearch(""); setFacilities([]); }}>ล้างตัวกรอง</button></div>}</>}</div>
     </section>

@@ -2,17 +2,20 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { List, LocateFixed, MapPin, Moon, Route, Search, Share2, Star } from "lucide-react";
+import { CloudRain, List, LocateFixed, MapPin, Moon, Route, Search, Share2, Star, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { BrandChips } from "@/components/BrandChips";
 import { PageFrame } from "@/components/PageFrame";
 import { StatusPanel } from "@/components/StatusPanel";
+import { StoreBadges } from "@/components/StoreBadges";
 import { StoreCard } from "@/components/StoreCard";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { enabledBrands } from "@/lib/brands";
 import { isFavorite } from "@/lib/favorites";
+import { formatDistance } from "@/lib/distance";
 import { formatDestination, isAlongRoute, parseDestination, ROUTE_CORRIDOR_KM } from "@/lib/route";
+import { fetchRainStatus } from "@/lib/weather";
 import { filterStores, shareStoreUrl } from "@/lib/stores";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useNearbyStores } from "@/hooks/useNearbyStores";
@@ -53,6 +56,15 @@ function MapPageContent() {
   const destinationParam = searchParams.get("to") ?? "";
   const destination = useMemo(() => parseDestination(destinationParam), [destinationParam]);
   const destinationStore = destination ? stores.find((store) => store.id === destination.id) ?? null : null;
+  const [raining, setRaining] = useState(false);
+  const [rainDismissed, setRainDismissed] = useState(false);
+  useEffect(() => {
+    if (!center) return;
+    const controller = new AbortController();
+    fetchRainStatus(center, controller.signal).then(setRaining);
+    return () => controller.abort();
+  }, [center]);
+
   const favoritesOnly = searchParams.get("only") === "favorites";
   const visibleStores = useMemo(() => {
     const alongRoute = (center && destination)
@@ -81,6 +93,11 @@ function MapPageContent() {
           <button className="text-xs font-bold text-[var(--orange)]" onClick={() => updateParams("only", "")}>แสดงทั้งหมด</button>
         </>}
       </div>
+      {raining && !rainDismissed && visibleStores.length > 0 && <div className="mb-4 flex items-center gap-3 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3">
+        <CloudRain size={20} className="shrink-0 text-sky-700" />
+        <p className="min-w-0 flex-1 text-sm text-sky-900">ฝนตกอยู่ — แวะ{visibleStores[0].name}ที่อยู่ใกล้สุด ({formatDistance(visibleStores[0].distanceKm)}) กันฝนไหม</p>
+        <button onClick={() => setRainDismissed(true)} aria-label="ปิดการแจ้งเตือนสภาพอากาศ" className="shrink-0 text-sky-700 hover:text-sky-900"><X size={17} /></button>
+      </div>}
       {status !== "ready" && status !== "idle" ? <StatusPanel status={status} error={error} retry={retry} /> : <div className="grid min-h-[calc(100vh-250px)] gap-4 lg:grid-cols-[1fr_360px]">
         <section className="surface relative min-h-[500px] overflow-hidden rounded-2xl"><MapCanvas
           center={center ?? { lat: 13.7563, lng: 100.5018 }}
@@ -98,7 +115,7 @@ function MapPageContent() {
             <a href={shareStoreUrl(highlighted)} target="_blank" rel="noreferrer" aria-label={`ส่งพิกัด ${highlighted.name} ไป LINE`} className="grid size-9 place-items-center rounded-full text-[var(--muted)] transition hover:bg-emerald-50 hover:text-[var(--green)]"><Share2 size={17} /></a>
             <FavoriteButton store={{ id: highlighted.id, name: highlighted.name, brandId: highlighted.brandId, lat: highlighted.lat, lng: highlighted.lng }} saved={isFavorite(favorites, highlighted.id)} onToggle={toggle} />
           </>}
-          badges={destination ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-bold text-[var(--green-dark)]">อยู่ระหว่างทาง</span> : undefined}
+          badges={<StoreBadges brandId={highlighted.brandId} alongRoute={Boolean(destination)} />}
         /></div>}<button onClick={retry} className="icon-button absolute right-4 top-4 z-[500] shadow-lg" aria-label="ระบุตำแหน่งใหม่"><LocateFixed size={19} /></button></section>
         <aside className="max-h-[calc(100vh-250px)] space-y-3 overflow-y-auto pr-1"><div className="flex items-center justify-between px-1"><strong>{visibleStores.length} ร้านที่พบ</strong><span className="text-xs text-[var(--muted)]">ใกล้สุดก่อน</span></div>{visibleStores.length ? visibleStores.slice(0, 12).map((store) => <button className="block w-full text-left" key={store.id} onClick={() => setPicked(store)}><StoreCard store={store} compact /></button>) : status !== "idle" && <div className="surface rounded-2xl p-8 text-center"><MapPin className="mx-auto text-[var(--orange)]" /><p className="mt-3 font-semibold">ยังไม่พบร้านในรัศมีนี้</p><p className="mt-1 text-sm text-[var(--muted)]">ลองเพิ่มรัศมีหรือเลือกแบรนด์อื่น</p></div>}</aside>
       </div>}

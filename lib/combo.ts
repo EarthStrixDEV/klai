@@ -1,5 +1,6 @@
 import { enabledBrands, getBrand } from "./brands";
 import { distanceKm } from "./distance";
+import { queryOverpass } from "./overpass";
 import type { BrandId, Coordinates, Store } from "./types";
 
 export type FuelBrand = "PTT" | "Bangchak" | "PT" | "Caltex";
@@ -31,30 +32,27 @@ export function matchFuelCombos(fuels: FuelStation[], stores: Store[], threshold
   }).sort((a, b) => a.distanceKm - b.distanceKm);
 }
 
-type Element = { id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
-
 export async function fetchFuelCombos(pairs: FuelBrand[], center: Coordinates, radiusMeters: number, thresholdMeters = FUEL_PROXIMITY_THRESHOLD_METERS, signal?: AbortSignal) {
   const provenPairs = pairs.filter(isProvenFuelPair);
   const storeBrands = enabledBrands.filter((brand) => brand.fuelBrandPair && provenPairs.includes(brand.fuelBrandPair));
   const fuelLines = provenPairs.map((pair) => `  nwr["amenity"="fuel"]["brand"~"${fuelPatterns[pair]}",i](around:${radiusMeters},${center.lat},${center.lng});`);
   const storeLines = storeBrands.map((brand) => `  nwr["${brand.osmKey}"${brand.osmValue.includes("|") ? "~" : "="}"${brand.osmValue}"]["brand"~"${brand.osmBrandPattern}",i](around:${radiusMeters},${center.lat},${center.lng});`);
   const query = `[out:json][timeout:25];\n(\n${[...fuelLines, ...storeLines].join("\n")}\n);\nout center tags;`;
-  const response = await fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: new URLSearchParams({ data: query }), signal });
-  if (!response.ok) throw new Error(`Overpass ตอบกลับ ${response.status}`);
-  const data = (await response.json()) as { elements: Element[] };
-  const fuels: FuelStation[] = [];
-  const stores: Store[] = [];
-  for (const element of data.elements) {
-    const lat = element.lat ?? element.center?.lat; const lng = element.lon ?? element.center?.lon; const tags = element.tags ?? {};
-    if (lat == null || lng == null) continue;
-    if (tags.amenity === "fuel") {
-      const brand = identifyFuelBrand(tags);
-      if (brand && provenPairs.includes(brand)) fuels.push({ id: String(element.id), name: tags.name || `${brand} Station`, brand, lat, lng, distanceKm: distanceKm(center, { lat, lng }), openingHours: tags.opening_hours, hasParking: tags.parking === "yes", hasToilets: tags.toilets === "yes", hasEv: tags["fuel:electricity"] === "yes" });
-      continue;
+  return queryOverpass(query, (data) => {
+    const fuels: FuelStation[] = [];
+    const stores: Store[] = [];
+    for (const element of data.elements) {
+      const lat = element.lat ?? element.center?.lat; const lng = element.lon ?? element.center?.lon; const tags = element.tags ?? {};
+      if (lat == null || lng == null) continue;
+      if (tags.amenity === "fuel") {
+        const brand = identifyFuelBrand(tags);
+        if (brand && provenPairs.includes(brand)) fuels.push({ id: String(element.id), name: tags.name || `${brand} Station`, brand, lat, lng, distanceKm: distanceKm(center, { lat, lng }), openingHours: tags.opening_hours, hasParking: tags.parking === "yes", hasToilets: tags.toilets === "yes", hasEv: tags["fuel:electricity"] === "yes" });
+        continue;
+      }
+      const text = `${tags.brand ?? ""} ${tags.name ?? ""}`;
+      const storeBrand = storeBrands.find((brand) => new RegExp(brand.osmBrandPattern, "i").test(text));
+      if (storeBrand) stores.push({ id: String(element.id), name: tags.name || storeBrand.name, brandId: storeBrand.id as BrandId, lat, lng, distanceKm: distanceKm(center, { lat, lng }), openingHours: tags.opening_hours, is24Hours: tags.opening_hours === "24/7", hasParking: tags.parking === "yes", hasAtm: tags.atm === "yes", inFuelStation: true });
     }
-    const text = `${tags.brand ?? ""} ${tags.name ?? ""}`;
-    const storeBrand = storeBrands.find((brand) => new RegExp(brand.osmBrandPattern, "i").test(text));
-    if (storeBrand) stores.push({ id: String(element.id), name: tags.name || storeBrand.name, brandId: storeBrand.id as BrandId, lat, lng, distanceKm: distanceKm(center, { lat, lng }), openingHours: tags.opening_hours, is24Hours: tags.opening_hours === "24/7", hasParking: tags.parking === "yes", hasAtm: tags.atm === "yes", inFuelStation: true });
-  }
-  return matchFuelCombos(fuels, stores, thresholdMeters);
+    return matchFuelCombos(fuels, stores, thresholdMeters);
+  }, signal);
 }

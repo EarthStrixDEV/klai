@@ -5,6 +5,29 @@ import { FUEL_PROXIMITY_THRESHOLD_METERS, fuelPatterns, identifyFuelBrand, type 
 
 const ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
 
+export type OverpassElement = { id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
+
+// ยิงทุก endpoint พร้อมกันแล้วใช้ผลลัพธ์ที่สำเร็จก่อน แทนการรอ endpoint แรก timeout ก่อนค่อยลองตัวถัดไป
+export async function queryOverpass<T>(query: string, parse: (data: { elements: OverpassElement[] }) => T, signal?: AbortSignal): Promise<T> {
+  const controller = new AbortController();
+  const forwardAbort = () => controller.abort();
+  signal?.addEventListener("abort", forwardAbort);
+  try {
+    return await Promise.any(ENDPOINTS.map(async (endpoint) => {
+      const response = await fetch(endpoint, { method: "POST", body: new URLSearchParams({ data: query }), signal: controller.signal });
+      if (!response.ok) throw new Error(`Overpass ตอบกลับ ${response.status}`);
+      return parse(await response.json());
+    }));
+  } catch (error) {
+    if (signal?.aborted) throw error;
+    if (error instanceof AggregateError) throw error.errors.find((item) => item instanceof Error) ?? new Error("ค้นหาร้านไม่สำเร็จ");
+    throw error;
+  } finally {
+    controller.abort();
+    signal?.removeEventListener("abort", forwardAbort);
+  }
+}
+
 export function buildStoreQuery(brandIds: BrandId[], center: Coordinates, radiusMeters: number) {
   const lines = brandIds.map((id) => {
     const brand = getBrand(id);
@@ -15,8 +38,6 @@ export function buildStoreQuery(brandIds: BrandId[], center: Coordinates, radius
   const fuelLines = fuelBrands.map((brand) => `  nwr["amenity"="fuel"]["brand"~"${fuelPatterns[brand]}",i](around:${radiusMeters},${center.lat},${center.lng});`);
   return `[out:json][timeout:20];\n(\n${[...lines, ...fuelLines].join("\n")}\n);\nout center tags;`;
 }
-
-type OverpassElement = { id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
 
 function identifyBrand(tags: Record<string, string>): BrandId | null {
   const haystack = `${tags.brand ?? ""} ${tags.name ?? ""}`;
@@ -49,30 +70,24 @@ export function normalizeStores(elements: OverpassElement[], center: Coordinates
   }).map((store) => ({ ...store, inFuelStation: fuelStations.some((fuel) => fuel.brand === getBrand(store.brandId).fuelBrandPair && distanceKm(store, fuel) * 1000 <= FUEL_PROXIMITY_THRESHOLD_METERS) })).sort((a, b) => a.distanceKm - b.distanceKm);
 }
 
+// ไม่รวม radius ใน key: cache ที่รัศมีกว้างกว่าครอบคลุมคำขอที่รัศมีแคบกว่าอยู่แล้ว กรองฝั่ง client ได้โดยไม่ยิงซ้ำ
+const cacheKeyFor = (brandIds: BrandId[], center: Coordinates) =>
+  `klai:stores:${brandIds.slice().sort().join(",")}:${center.lat.toFixed(3)}:${center.lng.toFixed(3)}`;
+
 export async function fetchStores(brandIds: BrandId[], center: Coordinates, radiusMeters: number, signal?: AbortSignal) {
-  const cacheKey = `klai:stores:${brandIds.slice().sort().join(",")}:${center.lat.toFixed(3)}:${center.lng.toFixed(3)}:${radiusMeters}`;
+  const cacheKey = cacheKeyFor(brandIds, center);
+  const radiusKm = radiusMeters / 1000;
   try {
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
-      const parsed = JSON.parse(cached) as { savedAt: number; stores: Store[] };
-      if (Date.now() - parsed.savedAt < 5 * 60_000) return parsed.stores;
+      const parsed = JSON.parse(cached) as { savedAt: number; radiusMeters: number; stores: Store[] };
+      const fresh = Date.now() - parsed.savedAt < 5 * 60_000;
+      if (fresh && parsed.radiusMeters >= radiusMeters) return parsed.stores.filter((store) => store.distanceKm <= radiusKm);
     }
   } catch { /* storage is optional */ }
 
   const query = buildStoreQuery(brandIds, center, radiusMeters);
-  let lastError: unknown;
-  for (const endpoint of ENDPOINTS) {
-    try {
-      const response = await fetch(endpoint, { method: "POST", body: new URLSearchParams({ data: query }), signal });
-      if (!response.ok) throw new Error(`Overpass ตอบกลับ ${response.status}`);
-      const data = (await response.json()) as { elements: OverpassElement[] };
-      const stores = normalizeStores(data.elements, center);
-      try { localStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), stores })); } catch { /* storage is optional */ }
-      return stores;
-    } catch (error) {
-      if (signal?.aborted) throw error;
-      lastError = error;
-    }
-  }
-  throw lastError instanceof Error ? lastError : new Error("ค้นหาร้านไม่สำเร็จ");
+  const stores = await queryOverpass(query, (data) => normalizeStores(data.elements, center), signal);
+  try { localStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), radiusMeters, stores })); } catch { /* storage is optional */ }
+  return stores;
 }

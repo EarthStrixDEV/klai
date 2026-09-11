@@ -3,7 +3,14 @@ import { distanceKm } from "./distance";
 import type { BrandId, Coordinates, Store } from "./types";
 import { FUEL_PROXIMITY_THRESHOLD_METERS, fuelPatterns, identifyFuelBrand, type FuelBrand } from "./combo";
 
-const ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
+// วัดจริงเมื่อ 2026-09-11: mail.ru ตอบ 3 กม./หลายแบรนด์ได้ใน ~1-5 วิ ขณะที่ overpass-api.de และ kumi ล่มหรือ 504
+// osm.ch ตอบเร็วแต่เป็น mirror เฉพาะภูมิภาค (คืน 0 elements ในไทย) จึงใช้ไม่ได้
+const ENDPOINTS = [
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter",
+];
 
 export type OverpassElement = { id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
 
@@ -16,7 +23,10 @@ export async function queryOverpass<T>(query: string, parse: (data: { elements: 
     return await Promise.any(ENDPOINTS.map(async (endpoint) => {
       const response = await fetch(endpoint, { method: "POST", body: new URLSearchParams({ data: query }), signal: controller.signal });
       if (!response.ok) throw new Error(`Overpass ตอบกลับ ${response.status}`);
-      return parse(await response.json());
+      // server ที่โหลดหนักบางตัวตอบ 200 พร้อม XML/HTML error page แทน JSON — ต้องถือว่า endpoint นั้นล้มเหลวเพื่อให้ตัวอื่นชนะแทน
+      const body = await response.text();
+      if (!body.trimStart().startsWith("{")) throw new Error("Overpass ส่งข้อมูลไม่ถูกรูปแบบ");
+      return parse(JSON.parse(body) as { elements: OverpassElement[] });
     }));
   } catch (error) {
     if (signal?.aborted) throw error;

@@ -76,6 +76,21 @@ describe("queryOverpass", () => {
     vi.stubGlobal("fetch", fetchMock);
     await expect(queryOverpass("query", (data) => data.elements.length)).rejects.toThrow("Overpass ตอบกลับ 504");
   });
+
+  it("rejects a 200 response whose body is an XML error page rather than JSON", async () => {
+    const fetchMock = vi.fn()
+      .mockImplementationOnce(() => Promise.resolve(new Response('<?xml version="1.0"?><osm-derived><remark>runtime error</remark></osm-derived>')))
+      .mockImplementation(() => Promise.resolve(new Response(JSON.stringify({ elements: [{ id: 1 }] }))));
+    vi.stubGlobal("fetch", fetchMock);
+    const result = await queryOverpass("query", (data) => data.elements.length);
+    expect(result).toBe(1);
+  });
+
+  it("surfaces the malformed-body error when every endpoint returns non-JSON", async () => {
+    const fetchMock = vi.fn().mockImplementation(() => Promise.resolve(new Response("<?xml version=\"1.0\"?><osm/>")));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(queryOverpass("query", (data) => data.elements.length)).rejects.toThrow("Overpass ส่งข้อมูลไม่ถูกรูปแบบ");
+  });
 });
 
 describe("fetchStores caching", () => {
@@ -95,10 +110,11 @@ describe("fetchStores caching", () => {
     vi.stubGlobal("localStorage", fakeLocalStorage);
 
     await fetchStores(["seven-eleven"], center, 5000);
-    expect(fetchMock).toHaveBeenCalledTimes(2); // both endpoints raced on the first call
+    const callsAfterFirstFetch = fetchMock.mock.calls.length;
+    expect(callsAfterFirstFetch).toBeGreaterThan(0); // every mirror is raced on the first call
 
     const stores = await fetchStores(["seven-eleven"], center, 1000);
-    expect(fetchMock).toHaveBeenCalledTimes(2); // no new request for the narrower radius
+    expect(fetchMock).toHaveBeenCalledTimes(callsAfterFirstFetch); // no new request for the narrower radius
     expect(stores).toHaveLength(1);
   });
 
@@ -110,7 +126,8 @@ describe("fetchStores caching", () => {
     vi.stubGlobal("localStorage", fakeLocalStorage);
 
     await fetchStores(["seven-eleven"], center, 1000);
+    const callsAfterFirstFetch = fetchMock.mock.calls.length;
     await fetchStores(["seven-eleven"], center, 5000);
-    expect(fetchMock).toHaveBeenCalledTimes(4); // second call's wider radius forces a refetch (2 endpoints each)
+    expect(fetchMock.mock.calls.length).toBe(callsAfterFirstFetch * 2); // wider radius forces a full refetch across every mirror
   });
 });

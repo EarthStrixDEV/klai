@@ -15,13 +15,18 @@ export function useNearbyStores(brandIds: BrandId[], radiusKm: number) {
   const [error, setError] = useState("");
   const abortRef = useRef<AbortController | null>(null);
 
+  const persistAndSetCenter = useCallback((coordinates: Coordinates) => {
+    try { sessionStorage.setItem(CURRENT_LOCATION_KEY, JSON.stringify(coordinates)); } catch { /* keep in memory */ }
+    setCenter(coordinates);
+  }, []);
+
   const locate = useCallback(() => {
     setStatus("locating"); setError("");
-    requestCoordinates().then((coordinates) => {
-      try { sessionStorage.setItem(CURRENT_LOCATION_KEY, JSON.stringify(coordinates)); } catch { /* keep in memory */ }
-      setCenter(coordinates);
-    }).catch((reason: unknown) => { setError(reason instanceof Error ? reason.message : "ระบุตำแหน่งไม่สำเร็จ"); setStatus("error"); });
-  }, []);
+    // resolve ด้วยพิกัดคร่าวๆ ก่อนทันทีที่ได้ ไม่รอ GPS ความแม่นสูงซึ่งอาจช้ากว่านี้มาก
+    // แล้วอัปเดตแบบเงียบๆ อีกครั้งถ้าตำแหน่งจริงต่างจากที่ประมาณไว้พอสมควร
+    requestCoordinates(persistAndSetCenter).then(persistAndSetCenter)
+      .catch((reason: unknown) => { setError(reason instanceof Error ? reason.message : "ระบุตำแหน่งไม่สำเร็จ"); setStatus("error"); });
+  }, [persistAndSetCenter]);
 
   useEffect(() => {
     try {

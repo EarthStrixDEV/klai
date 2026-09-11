@@ -25,7 +25,7 @@ export default function EmergencyPage() {
           {group.contacts.map((contact) => <div key={contact.number} className="surface flex items-center gap-3 rounded-2xl px-4 py-3.5">
             <span className="min-w-0 flex-1 font-semibold">{contact.label}</span>
             <span className="display-font text-lg font-extrabold text-red-600">{contact.number}</span>
-            <a href={`tel:${contact.number}`} aria-label={`โทร ${contact.label} ${contact.number}`} className="grid size-9 shrink-0 place-items-center rounded-full bg-red-50 text-red-700 transition hover:bg-red-100"><Phone size={16} /></a>
+            <a href={`tel:${contact.number}`} aria-label={`โทร ${contact.label} ${contact.number}`} className="grid size-11 shrink-0 place-items-center rounded-full bg-red-50 text-red-700 transition hover:bg-red-100"><Phone size={18} /></a>
           </div>)}
         </div>
       </div>)}

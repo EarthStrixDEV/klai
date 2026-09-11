@@ -36,6 +36,12 @@
   --c-cjmore-tint:#FBE7EE;
   --c-jiffy:#14919B;
   --c-jiffy-tint:#E3F5F6;
+  --c-ev:#0891B2;
+  --c-ev-tint:#E1F4F8;
+  /* v0.8 — ไอคอนดาวบันทึกร้านโปรด / badge อยู่ระหว่างทาง */
+  --star:#F5A623;
+  --enroute:#0E8C4B;
+  --enroute-tint:#EAF6EE;
 }
 *{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
@@ -101,6 +107,10 @@ button{font-family:inherit;cursor:pointer;}
       <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
         <span style="width:8px;height:8px;border-radius:50%;background:var(--c-jiffy);"></span>Jiffy
       </div>
+      <!-- EV Charging Station — ใหม่ใน v0.8 -->
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--c-ev);"></span>EV Charging
+      </div>
     </div>
 
     <!-- RADIUS FILTER -->
@@ -118,6 +128,12 @@ button{font-family:inherit;cursor:pointer;}
       <div style="padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">มีที่จอดรถ</div>
       <div style="padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">มี ATM</div>
       <div style="padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">อยู่ในปั๊มน้ำมัน</div>
+      <div style="width:1px;height:18px;background:var(--border);margin:0 2px;"></div>
+      <!-- โหมดขับรถกลางคืน — ใหม่ใน v0.8 -->
+      <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 12px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        โหมดกลางคืน
+      </div>
     </div>
 
     <!-- SUBHEADER -->
@@ -133,12 +149,20 @@ button{font-family:inherit;cursor:pointer;}
     <div style="display:flex;flex-direction:column;gap:16px;">
 
       <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
-        <div style="width:48px;height:48px;border-radius:12px;background:var(--orange-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        <div style="position:relative;flex-shrink:0;">
+          <div style="width:48px;height:48px;border-radius:12px;background:var(--orange-tint);display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+          </div>
+          <!-- บันทึกร้านโปรดแล้ว — ใหม่ใน v0.8 -->
+          <div style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--star);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1"><polygon points="12 2 15 9 22 9.5 16.5 14.5 18 22 12 18 6 22 7.5 14.5 2 9.5 9 9"></polygon></svg>
+          </div>
         </div>
         <div style="flex-grow:1;min-width:0;">
           <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">7-Eleven สาขาสยามสแควร์</div>
-          <div style="font-size:13px;color:var(--text-muted);">ถ.พระรามที่ 1 แขวงปทุมวัน · เปิด 24 ชม.</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:6px;">ถ.พระรามที่ 1 แขวงปทุมวัน · เปิด 24 ชม.</div>
+          <!-- ป้ายเก็บแต้มได้ — ใหม่ใน v0.8 -->
+          <span style="display:inline-block;font-size:11.5px;font-weight:600;color:var(--text-muted);background:var(--bg);border:1px solid var(--border);padding:3px 9px;border-radius:100px;">สะสมแต้ม All Member ได้</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
           <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">320 ม.</div>
@@ -153,7 +177,14 @@ button{font-family:inherit;cursor:pointer;}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--c-amazon)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
         </div>
         <div style="flex-grow:1;min-width:0;">
-          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">Café Amazon สาขาอโศก ทาวเวอร์</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="font-size:15.5px;font-weight:700;">Café Amazon สาขาอโศก ทาวเวอร์</span>
+            <!-- badge อยู่ระหว่างทาง — โชว์เมื่อเปิดโหมด Multi-stop จากหน้า Map ไว้, ใหม่ใน v0.8 -->
+            <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--enroute);background:var(--enroute-tint);padding:3px 9px;border-radius:100px;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--enroute)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+              อยู่ระหว่างทาง
+            </span>
+          </div>
           <div style="font-size:13px;color:var(--text-muted);">ถ.สุขุมวิท แขวงคลองเตยเหนือ · เปิด 24 ชม.</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
@@ -241,6 +272,23 @@ button{font-family:inherit;cursor:pointer;}
           <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">1.3 กม.</div>
           <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--c-ptt);display:flex;align-items:center;justify-content:center;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-ptt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- EV Charging Station — ใหม่ใน v0.8 -->
+      <div style="display:flex;align-items:center;gap:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface);">
+        <div style="width:48px;height:48px;border-radius:12px;background:var(--c-ev-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--c-ev)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <div style="flex-grow:1;min-width:0;">
+          <div style="font-size:15.5px;font-weight:700;margin-bottom:4px;">จุดชาร์จ EA Anywhere สาขาอ่อนนุช</div>
+          <div style="font-size:13px;color:var(--text-muted);">ถ.สุขุมวิท แขวงสวนหลวง · 4 หัวชาร์จ</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:100px;">1.5 กม.</div>
+          <div style="width:32px;height:32px;border-radius:50%;border:1.5px solid var(--c-ev);display:flex;align-items:center;justify-content:center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-ev)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
           </div>
         </div>
       </div>

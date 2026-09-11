@@ -42,7 +42,8 @@ export function buildStoreQuery(brandIds: BrandId[], center: Coordinates, radius
   const lines = brandIds.map((id) => {
     const brand = getBrand(id);
     const valueOperator = brand.osmValue.includes("|") ? "~" : "=";
-    return `  nwr["${brand.osmKey}"${valueOperator}"${brand.osmValue}"]["brand"~"${brand.osmBrandPattern}",i](around:${radiusMeters},${center.lat},${center.lng});`;
+    const brandFilter = brand.osmBrandPattern ? `["brand"~"${brand.osmBrandPattern}",i]` : "";
+    return `  nwr["${brand.osmKey}"${valueOperator}"${brand.osmValue}"]${brandFilter}(around:${radiusMeters},${center.lat},${center.lng});`;
   });
   const fuelBrands = [...new Set(brandIds.map((id) => getBrand(id).fuelBrandPair).filter((value): value is FuelBrand => Boolean(value)))];
   const fuelLines = fuelBrands.map((brand) => `  nwr["amenity"="fuel"]["brand"~"${fuelPatterns[brand]}",i](around:${radiusMeters},${center.lat},${center.lng});`);
@@ -51,7 +52,10 @@ export function buildStoreQuery(brandIds: BrandId[], center: Coordinates, radius
 
 function identifyBrand(tags: Record<string, string>): BrandId | null {
   const haystack = `${tags.brand ?? ""} ${tags.name ?? ""}`;
-  return enabledBrands.find((brand) => new RegExp(brand.osmBrandPattern, "i").test(haystack))?.id ?? null;
+  const branded = enabledBrands.find((brand) => brand.osmBrandPattern && new RegExp(brand.osmBrandPattern, "i").test(haystack));
+  if (branded) return branded.id;
+  // หมวดที่ไม่ผูกแบรนด์ (เช่น EV charging) จำแนกจาก tag ประเภทสถานที่แทน
+  return enabledBrands.find((brand) => !brand.osmBrandPattern && tags[brand.osmKey] === brand.osmValue)?.id ?? null;
 }
 
 export function normalizeStores(elements: OverpassElement[], center: Coordinates): Store[] {

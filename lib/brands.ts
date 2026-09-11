@@ -10,6 +10,8 @@ export const brands: Brand[] = [
   { id: "ptt", name: "PTT", shortName: "PTT", color: "#3457a6", bg: "#eaeef8", osmKey: "amenity", osmValue: "fuel", osmBrandPattern: "PTT|ปตท", enabled: true },
   { id: "cj-more", name: "CJ More", shortName: "CJ More", color: "#d6336c", bg: "#fbe7ee", osmKey: "shop", osmValue: "convenience", osmBrandPattern: "CJ More|ซีเจ มอร์", enabled: true },
   { id: "jiffy", name: "Jiffy", shortName: "Jiffy", color: "#14919b", bg: "#e3f5f6", osmKey: "shop", osmValue: "convenience", osmBrandPattern: "Jiffy", fuelBrandPair: "Caltex", enabled: true },
+  // หมวดรวมทุกเครือข่ายชาร์จ (EA Anywhere, PTT xplORe ฯลฯ) จึงไม่มี osmBrandPattern — ดู spec/klai-spec.md หัวข้อ 4
+  { id: "ev-charging", name: "EV Charging", shortName: "EV", color: "#0ea5a5", bg: "#e0f7f7", osmKey: "amenity", osmValue: "charging_station", enabled: true },
 ];
 
 export const enabledBrands = brands.filter((brand) => brand.enabled);

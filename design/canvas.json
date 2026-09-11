@@ -6,6 +6,8 @@
     { "file": "About.dc.html", "title": "About", "x": 4200, "y": 0, "w": 1280, "h": 1300 },
     { "file": "GasStationCombo.dc.html", "title": "Gas Station Combo Finder", "x": 0, "y": 2600, "w": 1280, "h": 1020 },
     { "file": "ShoppingList.dc.html", "title": "Shopping List", "x": 1400, "y": 2600, "w": 1280, "h": 890 },
+    { "file": "Emergency.dc.html", "title": "Emergency Contacts", "x": 4200, "y": 2600, "w": 1280, "h": 1360 },
+    { "file": "Favorites.dc.html", "title": "Favorites", "x": 0, "y": 4200, "w": 1280, "h": 950 },
     { "file": "Mascot.dc.html", "title": "Mascot", "x": 2800, "y": 2600, "w": 320, "h": 340 }
   ],
   "launch": { "view": "canvas" }

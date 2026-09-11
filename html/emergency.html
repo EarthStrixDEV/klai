@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เบอร์โทรฉุกเฉิน — Klai</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --orange:#F2661C;
+  --orange-dark:#D8500A;
+  --orange-tint:#FFF1E6;
+  --green:#0E8C4B;
+  --green-dark:#0A6B3A;
+  --green-tint:#EAF6EE;
+  --bg:#FFFCF8;
+  --surface:#FFFFFF;
+  --text:#1E241F;
+  --text-muted:#68706A;
+  --border:#E7E2D9;
+  /* Emergency page accent — dedicated red/danger tokens, only used on this page */
+  --danger:#DC2626;
+  --danger-dark:#B91C1C;
+  --danger-tint:#FEECEC;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
+h1,h2,h3,h4{font-family:'Prompt','Noto Sans Thai',system-ui,sans-serif;margin:0;}
+a{color:var(--text);text-decoration:none;}
+a:hover{color:var(--green);}
+button{font-family:inherit;cursor:pointer;}
+</style>
+</head>
+<body>
+<div style="width:100%;min-height:100vh;background:var(--bg);">
+
+  <!-- TOP BAR -->
+  <div style="display:flex;align-items:center;gap:16px;padding:16px 32px;background:var(--surface);border-bottom:1px solid var(--border);">
+    <a href="index.html" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </a>
+    <h1 style="font-size:18px;font-weight:700;flex-grow:1;">เบอร์โทรฉุกเฉิน</h1>
+    <a href="index.html" style="font-family:'Prompt',sans-serif;font-size:16px;color:var(--text);">Klai</a>
+  </div>
+
+  <div style="max-width:720px;margin:0 auto;padding:32px 32px 80px;">
+
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin:0 0 24px;">รวมเบอร์โทรฉุกเฉินหลักของไทย ไว้ให้กดโทรได้เร็วเวลาเจอเหตุฉุกเฉินระหว่างเดินทาง</p>
+
+    <!-- ALERT BANNER — เบอร์สำคัญที่สุด 3 เบอร์ -->
+    <div style="border-radius:20px;background:var(--danger);padding:22px 24px;margin-bottom:32px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        <span style="font-size:14.5px;font-weight:700;color:#FFFFFF;">เหตุฉุกเฉิน — โทรได้ทันที</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,0.16);border-radius:14px;padding:14px 8px;">
+          <span style="font-family:'Prompt',sans-serif;font-size:26px;font-weight:800;color:#FFFFFF;">191</span>
+          <span style="font-size:11.5px;color:rgba(255,255,255,0.85);text-align:center;">ตำรวจ/เหตุด่วน</span>
+        </a>
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,0.16);border-radius:14px;padding:14px 8px;">
+          <span style="font-family:'Prompt',sans-serif;font-size:26px;font-weight:800;color:#FFFFFF;">199</span>
+          <span style="font-size:11.5px;color:rgba(255,255,255,0.85);text-align:center;">ไฟไหม้/กู้ภัย</span>
+        </a>
+        <a href="#" style="display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,0.16);border-radius:14px;padding:14px 8px;">
+          <span style="font-family:'Prompt',sans-serif;font-size:26px;font-weight:800;color:#FFFFFF;">1669</span>
+          <span style="font-size:11.5px;color:rgba(255,255,255,0.85);text-align:center;">การแพทย์ฉุกเฉิน</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- GROUP: รถพยาบาล/กู้ชีพ -->
+    <div style="margin-bottom:28px;">
+      <h3 style="font-size:15px;font-weight:700;color:var(--text-muted);margin-bottom:10px;">รถพยาบาล / กู้ชีพเพิ่มเติม</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">ศูนย์เอราวัณ (กรุงเทพฯ)</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1646</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">หน่วยแพทย์กู้ชีวิต วชิรพยาบาล</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1554</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">โรงพยาบาลตำรวจ</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1691</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">มูลนิธิป่อเต็กตึ๊ง (กรุงเทพฯ)</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1418</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">มูลนิธิร่วมกตัญญู</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1677</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP: ตำรวจ/ทางหลวง/ท่องเที่ยว -->
+    <div style="margin-bottom:28px;">
+      <h3 style="font-size:15px;font-weight:700;color:var(--text-muted);margin-bottom:10px;">ตำรวจ / ทางหลวง / นักท่องเที่ยว</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">ตำรวจทางหลวง</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1193</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">ตำรวจท่องเที่ยว (Tourist Police)</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1155</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">ศูนย์ปราบปรามการโจรกรรมรถ</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1192</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROUP: สาธารณูปโภค/สุขภาพจิต -->
+    <div style="margin-bottom:32px;">
+      <h3 style="font-size:15px;font-weight:700;color:var(--text-muted);margin-bottom:10px;">สาธารณูปโภค / สุขภาพจิต</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">ไฟฟ้าดับ (การไฟฟ้านครหลวง)</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1130</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">น้ำประปามีปัญหา (การประปานครหลวง)</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1125</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface);">
+          <div style="flex-grow:1;min-width:0;">
+            <div style="font-size:14.5px;font-weight:600;">สายด่วนกรมสุขภาพจิต</div>
+          </div>
+          <span style="font-family:'Prompt',sans-serif;font-size:17px;font-weight:800;color:var(--danger);margin-right:10px;">1667</span>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:var(--danger-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div style="display:flex;gap:14px;padding:20px;border-radius:16px;background:var(--orange-tint);margin-bottom:20px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange-dark)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      <p style="font-size:13.5px;color:var(--orange-dark);line-height:1.8;margin:0;">
+        รายชื่อเบอร์โทรฉุกเฉินนี้รวบรวมจากแหล่งข้อมูลสาธารณะเพื่อความสะดวก ไม่ใช่ข้อมูลที่ Klai รับรองความถูกต้อง 100% เบอร์บางรายการอาจมีการเปลี่ยนแปลงได้ กรุณาตรวจสอบเบอร์อีกครั้งก่อนใช้งานในสถานการณ์ฉุกเฉินจริง
+      </p>
+    </div>
+
+    <p style="font-size:12px;color:var(--text-muted);text-align:center;">ข้อมูล ณ ก.ย. 2569</p>
+
+  </div>
+
+</div>
+</body>
+</html>

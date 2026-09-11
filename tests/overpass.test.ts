@@ -38,6 +38,29 @@ describe("buildStoreQuery", () => {
     expect(cafeAmazon?.inFuelStation).toBe(false);
   });
 
+  it("builds a charging-station query that filters by amenity alone, since EV charging spans many networks", () => {
+    const query = buildStoreQuery(["ev-charging"], { lat: 13.75, lng: 100.5 }, 3000);
+    expect(query).toContain('["amenity"="charging_station"](around:3000,13.75,100.5)');
+    expect(query).not.toContain('"brand"~"ev-charging"');
+  });
+
+  it("identifies a charging station with no brand tag at all", () => {
+    const center = { lat: 13.75, lng: 100.5 };
+    const stores = normalizeStores([
+      { id: 1, lat: 13.7501, lon: 100.5001, tags: { amenity: "charging_station" } },
+    ], center);
+    expect(stores.find((store) => store.brandId === "ev-charging")).toBeDefined();
+  });
+
+  it("does not pair a charging station into any fuel combo", () => {
+    const center = { lat: 13.75, lng: 100.5 };
+    const stores = normalizeStores([
+      { id: 1, lat: 13.75, lon: 100.5, tags: { amenity: "fuel", brand: "PTT" } },
+      { id: 2, lat: 13.7501, lon: 100.5001, tags: { amenity: "charging_station" } },
+    ], center);
+    expect(stores.find((store) => store.brandId === "ev-charging")?.inFuelStation).toBe(false);
+  });
+
   it("also surfaces the fuel station itself as a PTT store now that PTT is a searchable brand", () => {
     const center = { lat: 13.75, lng: 100.5 };
     const stores = normalizeStores([

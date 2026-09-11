@@ -34,7 +34,8 @@ export function matchFuelCombos(fuels: FuelStation[], stores: Store[], threshold
 
 export async function fetchFuelCombos(pairs: FuelBrand[], center: Coordinates, radiusMeters: number, thresholdMeters = FUEL_PROXIMITY_THRESHOLD_METERS, signal?: AbortSignal) {
   const provenPairs = pairs.filter(isProvenFuelPair);
-  const storeBrands = enabledBrands.filter((brand) => brand.fuelBrandPair && provenPairs.includes(brand.fuelBrandPair));
+  // แบรนด์ที่เข้า combo ต้องมี pattern เสมอ (หมวดไร้แบรนด์อย่าง EV charging ไม่มีคู่ปั๊มอยู่แล้ว)
+  const storeBrands = enabledBrands.filter((brand) => brand.osmBrandPattern && brand.fuelBrandPair && provenPairs.includes(brand.fuelBrandPair));
   const fuelLines = provenPairs.map((pair) => `  nwr["amenity"="fuel"]["brand"~"${fuelPatterns[pair]}",i](around:${radiusMeters},${center.lat},${center.lng});`);
   const storeLines = storeBrands.map((brand) => `  nwr["${brand.osmKey}"${brand.osmValue.includes("|") ? "~" : "="}"${brand.osmValue}"]["brand"~"${brand.osmBrandPattern}",i](around:${radiusMeters},${center.lat},${center.lng});`);
   const query = `[out:json][timeout:25];\n(\n${[...fuelLines, ...storeLines].join("\n")}\n);\nout center tags;`;
@@ -50,7 +51,7 @@ export async function fetchFuelCombos(pairs: FuelBrand[], center: Coordinates, r
         continue;
       }
       const text = `${tags.brand ?? ""} ${tags.name ?? ""}`;
-      const storeBrand = storeBrands.find((brand) => new RegExp(brand.osmBrandPattern, "i").test(text));
+      const storeBrand = storeBrands.find((brand) => brand.osmBrandPattern && new RegExp(brand.osmBrandPattern, "i").test(text));
       if (storeBrand) stores.push({ id: String(element.id), name: tags.name || storeBrand.name, brandId: storeBrand.id as BrandId, lat, lng, distanceKm: distanceKm(center, { lat, lng }), openingHours: tags.opening_hours, is24Hours: tags.opening_hours === "24/7", hasParking: tags.parking === "yes", hasAtm: tags.atm === "yes", inFuelStation: true });
     }
     return matchFuelCombos(fuels, stores, thresholdMeters);

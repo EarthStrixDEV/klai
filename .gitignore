@@ -12,5 +12,9 @@
 .DS_Store
 Thumbs.db
 
+# scratch: ticket breakdowns and exported drafts, not part of the app
+/.scratch
+/Claude outputs
+
 # TypeScript
 *.tsbuildinfo

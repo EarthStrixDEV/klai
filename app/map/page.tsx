@@ -2,15 +2,19 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { List, LocateFixed, MapPin, Search } from "lucide-react";
+import { List, LocateFixed, MapPin, Moon, Route, Search, Share2, Star } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { BrandChips } from "@/components/BrandChips";
 import { PageFrame } from "@/components/PageFrame";
 import { StatusPanel } from "@/components/StatusPanel";
 import { StoreCard } from "@/components/StoreCard";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { enabledBrands } from "@/lib/brands";
-import { filterStores } from "@/lib/stores";
+import { isFavorite } from "@/lib/favorites";
+import { formatDestination, isAlongRoute, parseDestination, ROUTE_CORRIDOR_KM } from "@/lib/route";
+import { filterStores, shareStoreUrl } from "@/lib/stores";
+import { useFavorites } from "@/hooks/useFavorites";
 import { useNearbyStores } from "@/hooks/useNearbyStores";
 import { useSearchPreferences } from "@/hooks/useSearchPreferences";
 import type { Store } from "@/lib/types";
@@ -24,7 +28,7 @@ export default function MapPage() {
 }
 
 function MapPageContent() {
-  const { brandIds: selected, radiusKm: radius, setBrandIds: setSelected, setRadiusKm: setRadius } = useSearchPreferences();
+  const { brandIds: selected, radiusKm: radius, nightMode, setBrandIds: setSelected, setRadiusKm: setRadius, setNightMode } = useSearchPreferences();
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("selected") ?? "";
@@ -41,15 +45,61 @@ function MapPageContent() {
   }, [search]);
   const setPicked = (store: Store) => updateParams("selected", store.id);
   const { center, stores, status, error, retry } = useNearbyStores(selected, radius);
-  const visibleStores = useMemo(() => filterStores(stores, { search, brandIds: selected, radiusKm: radius, facilities: [] }), [stores, search, selected, radius]);
+  const { favorites, toggle } = useFavorites();
+  const matching = useMemo(() => filterStores(stores, { search, brandIds: selected, radiusKm: radius, facilities: nightMode ? ["24hours"] : [] }), [stores, search, selected, radius, nightMode]);
+
+  // จุดหมายเก็บเป็น "id,lat,lng" ใน URL เพื่อให้หน้า List Store อ่านต่อได้ ไม่ต้องมี geocoding
+  // พกพิกัดไปด้วยเพราะปลายทางอาจไม่อยู่ในผลค้นหาปัจจุบัน แต่ยังต้องคำนวณเส้นทางได้
+  const destinationParam = searchParams.get("to") ?? "";
+  const destination = useMemo(() => parseDestination(destinationParam), [destinationParam]);
+  const destinationStore = destination ? stores.find((store) => store.id === destination.id) ?? null : null;
+  const favoritesOnly = searchParams.get("only") === "favorites";
+  const visibleStores = useMemo(() => {
+    const alongRoute = (center && destination)
+      ? matching.filter((store) => isAlongRoute(center, destination, store, ROUTE_CORRIDOR_KM))
+      : matching;
+    return favoritesOnly ? alongRoute.filter((store) => isFavorite(favorites, store.id)) : alongRoute;
+  }, [matching, center, destination, favoritesOnly, favorites]);
+
   const picked = selectedId ? visibleStores.find((store) => store.id === selectedId) ?? null : null;
   const highlighted = picked ?? visibleStores[0] ?? null;
   return <PageFrame footer={false}>
     <div className="container-wide py-6">
-      <div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><p className="eyebrow">สำรวจรอบตัว</p><h1 className="display-font mt-1 text-2xl font-extrabold md:text-3xl">แผนที่ร้านใกล้คุณ</h1></div><Link href={search ? `/stores?q=${encodeURIComponent(search)}` : "/stores"} className="btn-secondary !py-2.5 text-sm"><List size={17} /> ดูแบบรายการ</Link></div>
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><p className="eyebrow">สำรวจรอบตัว</p><h1 className="display-font mt-1 text-2xl font-extrabold md:text-3xl">แผนที่ร้านใกล้คุณ</h1></div><Link href={`/stores${searchParams.toString() ? `?${searchParams.toString()}` : ""}`} className="btn-secondary !py-2.5 text-sm"><List size={17} /> ดูแบบรายการ</Link></div>
       <div className="surface mb-4 grid gap-4 rounded-2xl p-4 lg:grid-cols-[1fr_220px_130px] lg:items-end"><div><label className="mb-2 block text-xs font-bold text-[var(--muted)]">เลือกแบรนด์</label><BrandChips selected={selected} onChange={setSelected} /></div><label className="text-xs font-bold text-[var(--muted)]">ค้นหา<span className="relative mt-2 block"><Search className="absolute left-3 top-3.5" size={17} /><input className="field !pl-10" value={search} onChange={(event) => setSearchInput(event.target.value)} placeholder="ชื่อร้าน / ย่าน" /></span></label><label className="text-xs font-bold text-[var(--muted)]">รัศมี<select className="field mt-2 min-w-32" value={radius} onChange={(event) => setRadius(Number(event.target.value))}>{[.5, 1, 3, 5].map((value) => <option key={value} value={value}>{value < 1 ? "500 ม." : `${value} กม.`}</option>)}</select></label></div>
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <button className="brand-chip" aria-pressed={nightMode} style={nightMode ? { background: "#1e293b", color: "white" } : {}} onClick={() => setNightMode(!nightMode)}><Moon size={15} /> โหมดกลางคืน</button>
+        {nightMode && <span className="text-xs text-[var(--muted)]">แสดงเฉพาะร้านที่เปิด 24 ชม.</span>}
+        {destination && <>
+          <span className="mx-1 h-5 w-px bg-[var(--border)]" />
+          <span className="brand-chip" style={{ background: "var(--green)", color: "white" }}><Route size={15} /> แวะระหว่างทางไป {destinationStore?.name ?? "จุดหมาย"}</span>
+          <button className="text-xs font-bold text-[var(--orange)]" onClick={() => updateParams("to", "")}>ยกเลิก</button>
+        </>}
+        {favoritesOnly && <>
+          <span className="mx-1 h-5 w-px bg-[var(--border)]" />
+          <span className="brand-chip" style={{ background: "#fff6e5", color: "#b45309" }}><Star size={15} /> เฉพาะร้านโปรด</span>
+          <button className="text-xs font-bold text-[var(--orange)]" onClick={() => updateParams("only", "")}>แสดงทั้งหมด</button>
+        </>}
+      </div>
       {status !== "ready" && status !== "idle" ? <StatusPanel status={status} error={error} retry={retry} /> : <div className="grid min-h-[calc(100vh-250px)] gap-4 lg:grid-cols-[1fr_360px]">
-        <section className="surface relative min-h-[500px] overflow-hidden rounded-2xl"><MapCanvas center={center ?? { lat: 13.7563, lng: 100.5018 }} stores={status === "idle" ? [] : visibleStores} radiusKm={radius} selectedId={highlighted?.id} onSelect={setPicked} />{status === "idle" && <div className="absolute inset-x-4 top-4 z-[500]"><StatusPanel status={status} error={error} retry={retry} /></div>}{highlighted && <div className="absolute inset-x-3 bottom-3 z-[500] max-w-xl md:left-5 md:right-auto"><StoreCard store={highlighted} compact /></div>}<button onClick={retry} className="icon-button absolute right-4 top-4 z-[500] shadow-lg" aria-label="ระบุตำแหน่งใหม่"><LocateFixed size={19} /></button></section>
+        <section className="surface relative min-h-[500px] overflow-hidden rounded-2xl"><MapCanvas
+          center={center ?? { lat: 13.7563, lng: 100.5018 }}
+          stores={status === "idle" ? [] : visibleStores}
+          radiusKm={radius}
+          selectedId={highlighted?.id}
+          onSelect={setPicked}
+          alongRoute={Boolean(destination)}
+          renderPopupActions={(store) => <FavoriteButton store={{ id: store.id, name: store.name, brandId: store.brandId, lat: store.lat, lng: store.lng }} saved={isFavorite(favorites, store.id)} onToggle={toggle} />}
+        />{status === "idle" && <div className="absolute inset-x-4 top-4 z-[500]"><StatusPanel status={status} error={error} retry={retry} /></div>}{highlighted && <div className="absolute inset-x-3 bottom-3 z-[500] max-w-xl md:left-5 md:right-auto"><StoreCard
+          store={highlighted}
+          compact
+          actions={<>
+            <button type="button" aria-label={`ตั้ง ${highlighted.name} เป็นจุดหมาย`} onClick={() => updateParams("to", formatDestination({ id: highlighted.id, lat: highlighted.lat, lng: highlighted.lng }))} className="grid size-9 place-items-center rounded-full text-[var(--muted)] transition hover:bg-emerald-50 hover:text-[var(--green)]"><Route size={17} /></button>
+            <a href={shareStoreUrl(highlighted)} target="_blank" rel="noreferrer" aria-label={`ส่งพิกัด ${highlighted.name} ไป LINE`} className="grid size-9 place-items-center rounded-full text-[var(--muted)] transition hover:bg-emerald-50 hover:text-[var(--green)]"><Share2 size={17} /></a>
+            <FavoriteButton store={{ id: highlighted.id, name: highlighted.name, brandId: highlighted.brandId, lat: highlighted.lat, lng: highlighted.lng }} saved={isFavorite(favorites, highlighted.id)} onToggle={toggle} />
+          </>}
+          badges={destination ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-bold text-[var(--green-dark)]">อยู่ระหว่างทาง</span> : undefined}
+        /></div>}<button onClick={retry} className="icon-button absolute right-4 top-4 z-[500] shadow-lg" aria-label="ระบุตำแหน่งใหม่"><LocateFixed size={19} /></button></section>
         <aside className="max-h-[calc(100vh-250px)] space-y-3 overflow-y-auto pr-1"><div className="flex items-center justify-between px-1"><strong>{visibleStores.length} ร้านที่พบ</strong><span className="text-xs text-[var(--muted)]">ใกล้สุดก่อน</span></div>{visibleStores.length ? visibleStores.slice(0, 12).map((store) => <button className="block w-full text-left" key={store.id} onClick={() => setPicked(store)}><StoreCard store={store} compact /></button>) : status !== "idle" && <div className="surface rounded-2xl p-8 text-center"><MapPin className="mx-auto text-[var(--orange)]" /><p className="mt-3 font-semibold">ยังไม่พบร้านในรัศมีนี้</p><p className="mt-1 text-sm text-[var(--muted)]">ลองเพิ่มรัศมีหรือเลือกแบรนด์อื่น</p></div>}</aside>
       </div>}
       <div className="mt-4 flex flex-wrap gap-2 text-xs text-[var(--muted)]">{enabledBrands.map((brand) => <button onClick={() => setSelected(selected.includes(brand.id) && selected.length > 1 ? selected.filter((id) => id !== brand.id) : [brand.id])} className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 ${selected.includes(brand.id) ? "bg-white" : "opacity-45"}`} key={brand.id}><span className="size-2.5 rounded-full" style={{ background: brand.color }} />{brand.name}</button>)}</div>

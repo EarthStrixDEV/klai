@@ -8,7 +8,8 @@ import { LocationCta } from "./LocationCta";
 
 const links = [
   ["/", "หน้าหลัก"], ["/map", "แผนที่"], ["/stores", "รายชื่อร้าน"],
-  ["/shopping-list", "ลิสต์ของ"], ["/gas-station-combo", "Combo"], ["/about", "เกี่ยวกับ"],
+  ["/favorites", "ร้านโปรด"], ["/shopping-list", "ลิสต์ของ"], ["/gas-station-combo", "Combo"],
+  ["/emergency", "ฉุกเฉิน"], ["/about", "เกี่ยวกับ"],
 ];
 
 export function SiteHeader() {

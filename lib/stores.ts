@@ -18,3 +18,7 @@ export function filterStores(stores: Store[], filters: StoreFilters) {
 
 export const navigationUrl = (store: Pick<Store, "lat" | "lng">) =>
   `https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`;
+
+/** ส่งพิกัดร้านเดียวไป LINE — คนละปุ่มกับการส่งลิสต์ของในหน้า Shopping List */
+export const shareStoreUrl = (store: Pick<Store, "name" | "lat" | "lng">) =>
+  `https://line.me/R/share?text=${encodeURIComponent(`${store.name}\n${navigationUrl(store)}`)}`;

@@ -27,6 +27,8 @@
   --c-amazon-tint:#E8F3EC;
   --c-inthanin:#8BC34A;
   --c-inthanin-tint:#F1F8E9;
+  /* v0.8 — แถบแจ้งเตือนติดตั้ง PWA */
+  --pwa:#1E241F;
 }
 *{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
@@ -50,12 +52,25 @@ button{font-family:inherit;cursor:pointer;}
       <a href="#" style="font-size:15px;font-weight:600;color:var(--green-dark);">หน้าหลัก</a>
       <a href="#" style="font-size:15px;font-weight:500;color:var(--text-muted);">แผนที่</a>
       <a href="#" style="font-size:15px;font-weight:500;color:var(--text-muted);">รายชื่อร้าน</a>
+      <!-- ร้านโปรด — ใหม่ใน v0.8 -->
+      <a href="#" style="font-size:15px;font-weight:500;color:var(--text-muted);">ร้านโปรด</a>
+      <a href="#" style="font-size:15px;font-weight:500;color:var(--text-muted);">เบอร์ฉุกเฉิน</a>
       <a href="#" style="font-size:15px;font-weight:500;color:var(--text-muted);">เกี่ยวกับ</a>
     </div>
     <a href="#" style="display:flex;align-items:center;gap:8px;background:var(--orange);color:#FFFFFF;padding:11px 20px;border-radius:10px;font-size:15px;font-weight:600;">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="2" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="22"></line><line x1="2" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="22" y2="12"></line></svg>
       หาร้านใกล้ฉัน
     </a>
+  </div>
+
+  <!-- PWA INSTALL BANNER — ใหม่ใน v0.8, dismissible -->
+  <div style="max-width:1200px;margin:0 auto 8px;padding:0 40px;">
+    <div style="display:flex;align-items:center;gap:14px;background:var(--pwa);color:#FFFFFF;padding:12px 20px;border-radius:14px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+      <span style="font-size:13.5px;font-weight:600;flex-grow:1;">ติดตั้ง Klai เป็นแอปได้แล้ว — เปิดเร็วขึ้น ใช้งานได้บางส่วนแม้สัญญาณไม่ดี</span>
+      <div style="background:#FFFFFF;color:var(--text);padding:8px 16px;border-radius:100px;font-size:13px;font-weight:700;white-space:nowrap;">ติดตั้ง</div>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </div>
   </div>
 
   <!-- HERO -->
@@ -175,7 +190,7 @@ button{font-family:inherit;cursor:pointer;}
             <span style="width:9px;height:9px;border-radius:50%;background:var(--c-inthanin);"></span>
           </div>
           <h3 style="font-size:17px;font-weight:700;margin-bottom:10px;">เลือกได้หลายแบรนด์พร้อมกัน</h3>
-          <p style="font-size:14.5px;color:var(--text-muted);line-height:1.7;">7-Eleven, Café Amazon, อินทนิล, พันธุ์ไทย, Black Canyon, Chao Doi, CJ More, Jiffy, ปั๊ม PTT และแบรนด์อื่นๆ ที่จะเพิ่มต่อไป ติ๊กเลือกได้เองตามที่สนใจ</p>
+          <p style="font-size:14.5px;color:var(--text-muted);line-height:1.7;">7-Eleven, Café Amazon, อินทนิล, พันธุ์ไทย, Black Canyon, Chao Doi, CJ More, Jiffy, ปั๊ม PTT, จุดชาร์จ EV และแบรนด์อื่นๆ ที่จะเพิ่มต่อไป ติ๊กเลือกได้เองตามที่สนใจ</p>
         </div>
         <div style="border:1px solid var(--border);border-radius:18px;padding:28px;">
           <div style="width:44px;height:44px;border-radius:12px;background:var(--orange-tint);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
@@ -238,6 +253,10 @@ button{font-family:inherit;cursor:pointer;}
         </div>
         <div style="display:flex;flex-direction:column;gap:12px;">
           <a href="#" style="font-size:13.5px;color:var(--text-muted);">รายชื่อร้าน</a>
+          <a href="#" style="font-size:13.5px;color:var(--text-muted);">ร้านโปรด</a>
+          <a href="#" style="font-size:13.5px;color:var(--text-muted);">เบอร์ฉุกเฉิน</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
           <a href="#" style="font-size:13.5px;color:var(--text-muted);">เกี่ยวกับ</a>
         </div>
       </div>

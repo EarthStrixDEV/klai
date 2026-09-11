@@ -39,6 +39,13 @@
   --c-cjmore-tint:#FBE7EE;
   --c-jiffy:#14919B;
   --c-jiffy-tint:#E3F5F6;
+  --c-ev:#0891B2;
+  --c-ev-tint:#E1F4F8;
+  /* v0.8 — ป้ายแจ้งเตือนสภาพอากาศ ใช้โทนฟ้าฝนแยกจากชุดสีแบรนด์ */
+  --weather:#2563EB;
+  --weather-tint:#EAF1FE;
+  /* v0.8 — ไอคอนดาวบันทึกร้านโปรด ใช้เฉพาะปุ่มดาวเท่านั้น */
+  --star:#F5A623;
 }
 *{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Noto Sans Thai','Prompt',system-ui,sans-serif;}
@@ -98,19 +105,52 @@ button{font-family:inherit;cursor:pointer;}
     <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
       <span style="width:8px;height:8px;border-radius:50%;background:var(--c-jiffy);"></span>Jiffy
     </div>
+    <!-- EV Charging Station — ใหม่ใน v0.8, เป็น "หมวด" ครอบคลุมทุกเครือข่าย ไม่ใช่แบรนด์เดียว -->
+    <div style="display:flex;align-items:center;gap:6px;padding:7px 14px 7px 10px;border-radius:100px;background:var(--surface);border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-muted);">
+      <span style="width:8px;height:8px;border-radius:50%;background:var(--c-ev);"></span>EV Charging
+    </div>
+  </div>
+
+  <!-- MULTI-STOP: แวะได้ระหว่างทาง — ใหม่ใน v0.8 -->
+  <div style="display:flex;align-items:center;gap:12px;padding:12px 32px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <div style="width:38px;height:22px;border-radius:100px;background:var(--border);position:relative;flex-shrink:0;">
+        <div style="position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+      </div>
+      <span style="font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;">แวะระหว่างทาง</span>
+    </div>
+    <div style="flex-grow:1;display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px 16px;max-width:360px;opacity:0.55;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+      <span style="font-size:13.5px;color:var(--text-muted);">ระบุจุดหมายปลายทาง...</span>
+    </div>
+    <span style="font-size:12px;color:var(--text-muted);">เปิดแล้วกรองเฉพาะร้านที่อยู่ระหว่างทางไปจุดหมาย</span>
   </div>
 
   <!-- FILTER CHIPS -->
-  <div style="display:flex;align-items:center;gap:10px;padding:14px 32px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
+  <div style="display:flex;align-items:center;gap:10px;padding:14px 32px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;">
     <span style="font-size:13px;color:var(--text-muted);margin-right:6px;">รัศมี:</span>
     <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">500 ม.</div>
     <div style="padding:8px 16px;border-radius:100px;background:var(--orange);color:#FFFFFF;font-size:13.5px;font-weight:700;">1 กม.</div>
     <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">3 กม.</div>
     <div style="padding:8px 16px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">5 กม.</div>
+    <div style="width:1px;height:20px;background:var(--border);margin:0 4px;"></div>
+    <!-- โหมดขับรถกลางคืน — ใหม่ใน v0.8 -->
+    <div style="display:flex;align-items:center;gap:7px;padding:8px 16px 8px 12px;border-radius:100px;background:var(--bg);border:1px solid var(--border);font-size:13.5px;font-weight:600;color:var(--text-muted);">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      โหมดกลางคืน
+    </div>
   </div>
 
   <!-- MAP CANVAS -->
   <div style="position:relative;flex-grow:1;background:var(--green-tint);overflow:hidden;">
+
+    <!-- WEATHER NOTIFICATION BANNER — ใหม่ใน v0.8, dismissible, โชว์เฉพาะเมื่อมีฝนตกตามพิกัด user -->
+    <div style="position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:12px;background:var(--weather);color:#FFFFFF;padding:12px 16px 12px 18px;border-radius:14px;box-shadow:0 10px 24px rgba(37,99,235,0.28);max-width:420px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M16 13v8"></path><path d="M8 13v8"></path><path d="M12 15v8"></path><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></svg>
+      <span style="font-size:13.5px;font-weight:600;flex-grow:1;">ฝนตกอยู่ แวะร้านใกล้สุดกันฝนไหม</span>
+      <div style="background:rgba(255,255,255,0.2);padding:7px 14px;border-radius:100px;font-size:12.5px;font-weight:700;white-space:nowrap;">ดูร้านใกล้สุด</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </div>
     <div style="position:absolute;top:120px;left:0;right:0;height:1px;background:#FFFFFF;"></div>
     <div style="position:absolute;top:320px;left:0;right:0;height:1px;background:#FFFFFF;"></div>
     <div style="position:absolute;top:560px;left:0;right:0;height:1px;background:#FFFFFF;"></div>
@@ -134,6 +174,9 @@ button{font-family:inherit;cursor:pointer;}
     <svg style="position:absolute;top:260px;left:1000px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-ptt)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
     <!-- CJ More -->
     <svg style="position:absolute;top:540px;left:640px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-cjmore)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <!-- EV Charging Station — ใหม่ใน v0.8, ไอคอนสายชาร์จ/ปลั๊กแทนไอคอนหมุดร้านทั่วไป -->
+    <svg style="position:absolute;top:320px;left:860px;" width="30" height="30" viewBox="0 0 24 24" fill="var(--c-ev)" stroke="#FFFFFF" stroke-width="1"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path></svg>
+    <svg style="position:absolute;top:326px;left:869px;pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="#FFFFFF"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
 
     <!-- selected / nearest pin, highlighted (สี pin = สีแบรนด์ 7-Eleven ของร้านนี้เอง, วง glow รอบๆ คือ indicator "ใกล้สุด" ไม่ใช่สีแบรนด์) -->
     <div style="position:absolute;top:388px;left:606px;width:52px;height:52px;border-radius:50%;background:rgba(30,36,31,0.14);"></div>
@@ -150,7 +193,17 @@ button{font-family:inherit;cursor:pointer;}
           </div>
           <div style="font-size:13px;color:var(--text-muted);">ถ.พระรามที่ 1 แขวงปทุมวัน</div>
         </div>
-        <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:100px;white-space:nowrap;">350 ม.</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <!-- บันทึกร้านโปรด — ใหม่ใน v0.8 -->
+          <div style="width:34px;height:34px;border-radius:50%;border:1.5px solid var(--star);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--star)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9.5 16.5 14.5 18 22 12 18 6 22 7.5 14.5 2 9.5 9 9"></polygon></svg>
+          </div>
+          <!-- แชร์พิกัดไป LINE — ใหม่ใน v0.8 -->
+          <div style="width:34px;height:34px;border-radius:50%;border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          </div>
+          <div style="background:var(--green-tint);color:var(--green-dark);font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:100px;white-space:nowrap;">350 ม.</div>
+        </div>
       </div>
       <div style="display:flex;gap:12px;">
         <a href="#" style="flex-grow:1;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--orange);color:#FFFFFF;padding:13px;border-radius:12px;font-size:14.5px;font-weight:700;">

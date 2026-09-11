@@ -9,7 +9,8 @@ export type BrandId =
   | "chao-doi"
   | "ptt"
   | "cj-more"
-  | "jiffy";
+  | "jiffy"
+  | "ev-charging";
 
 export type Brand = {
   id: BrandId;
@@ -19,7 +20,8 @@ export type Brand = {
   bg: string;
   osmKey: "shop" | "amenity";
   osmValue: string;
-  osmBrandPattern: string;
+  /** เว้นว่างไว้สำหรับหมวดที่ครอบหลายเครือข่าย (เช่น EV charging) — query และการจำแนกจะอิง osmValue อย่างเดียว */
+  osmBrandPattern?: string;
   fuelBrandPair?: "PTT" | "Bangchak" | "PT" | "Caltex";
   enabled: boolean;
 };
